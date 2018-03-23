@@ -8,8 +8,9 @@
     </v-toolbar>
     <v-content>
       <v-container fluid fill-height>
-        <v-layout justify-center align-start style="width:100%">
+        <v-layout justify-center align-start>
           <v-slide-x-transition mode="out-in">
+            <query-creation class="mt-0"></query-creation>
           </v-slide-x-transition>
         </v-layout>
       </v-container>
@@ -18,7 +19,12 @@
 </template>
 
 <script>
+import QueryCreation from 'views/QueryCreation'
+
 export default {
-  name: 'App'
+  name: 'App',
+  components: {
+    QueryCreation
+  },
 }
 </script>

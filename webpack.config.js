@@ -1,4 +1,5 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const path = require('path')
 
 const appconfig = require('./appconfig')
 
@@ -30,7 +31,10 @@ module.exports = {
   },
   resolve: {
     alias: {
-      'vue$': 'vue/dist/vue.esm.js'
+      'vue$': 'vue/dist/vue.esm.js',
+      'services': path.resolve(__dirname, './src/services'),
+      'views': path.resolve(__dirname, './src/views'),
+      '~': __dirname
     },
     extensions: ['*', '.js', '.vue', '.json']
   },
