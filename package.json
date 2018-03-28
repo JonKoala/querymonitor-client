@@ -11,8 +11,10 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
+    "copy-to-clipboard": "^3.0.8",
     "express": "^4.16.3",
     "js-yaml": "^3.11.0",
+    "sql-formatter": "^2.2.0",
     "vue": "^2.5.16",
     "vue-axios": "^2.0.2",
     "vue-router": "^3.0.1",

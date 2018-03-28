@@ -8,10 +8,10 @@
           </v-toolbar>
           <v-container fluid grid-list-md fill-height>
             <v-layout row wrap>
-              <v-flex class="pa-2" xs8>
-                <v-text-field v-model="query" multi-line hide-details no-resize></v-text-field>
-              </v-flex>
               <v-flex xs4>
+                <query-editor v-model="query" class="pa-1"></query-editor>
+              </v-flex>
+              <v-flex xs6>
                 <v-btn v-on:click="testClicked()">TESTAR</v-btn>
               </v-flex>
             </v-layout>
@@ -31,7 +31,6 @@
               <td v-for="prop in Object.keys(props.item)" >{{ props.item[prop] }}</td>
             </template>
           </v-data-table>
-          </v-data-table>
         </v-card>
       </v-flex>
     </v-layout>
@@ -41,8 +40,13 @@
 <script>
 import ApiService from 'services/api.service'
 
+import QueryEditor from 'components/QueryEditor'
+
 export default {
   name: 'QueryCreation',
+  components: {
+    QueryEditor
+  },
   data () {
     return {
       query: null,
@@ -56,9 +60,7 @@ export default {
       if (!this.query)
         return;
 
-      var query = this.query.replace(/(?:\r\n|\r|\n)/g, ' ');
-
-      ApiService.get(`select/${query}`).then(results => {
+      ApiService.get(`select/${this.query}`).then(results => {
         this.results = results;
         this.headers = Object.keys(results[0]).map((label) => {
           return {text: label.toUpperCase(), value: label};
