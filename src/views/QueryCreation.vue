@@ -11,7 +11,7 @@
               <v-flex xs4>
                 <query-editor v-model="query" class="pa-1"></query-editor>
               </v-flex>
-              <v-flex xs6>
+              <v-flex xs8>
                 <v-btn v-on:click="testClicked()">TESTAR</v-btn>
               </v-flex>
             </v-layout>
@@ -23,14 +23,7 @@
           <v-toolbar color="blue-grey" dense card>
             <v-toolbar-title class="white--text">RESULTADO</v-toolbar-title>
           </v-toolbar>
-          <v-data-table
-            v-bind:items="results"
-            v-bind:headers="headers"
-            hide-actions>
-            <template slot="items" slot-scope="props">
-              <td v-for="prop in Object.keys(props.item)" >{{ props.item[prop] }}</td>
-            </template>
-          </v-data-table>
+          <query-results v-model="results" class="pa-0"></query-results>
         </v-card>
       </v-flex>
     </v-layout>
@@ -41,17 +34,17 @@
 import ApiService from 'services/api.service'
 
 import QueryEditor from 'components/QueryEditor'
+import QueryResults from 'components/QueryResults'
 
 export default {
   name: 'QueryCreation',
   components: {
-    QueryEditor
+    QueryEditor,
+    QueryResults
   },
   data () {
     return {
       query: null,
-
-      headers: [],
       results: []
     };
   },
@@ -60,12 +53,7 @@ export default {
       if (!this.query)
         return;
 
-      ApiService.get(`select/${this.query}`).then(results => {
-        this.results = results;
-        this.headers = Object.keys(results[0]).map((label) => {
-          return {text: label.toUpperCase(), value: label};
-        });
-      });
+      ApiService.get(`select/${this.query}`).then(results => { this.results = results; });
     }
   }
 }
