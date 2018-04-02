@@ -19,5 +19,9 @@ export default {
       }).catch(err => {
         throw new Error(`ApiService error: ${err}`);
       });
+  },
+  post(service, data) {
+    service = formatUrl(service);
+    return Vue.axios.post(`${appconfig['url']['api']}/${service}`, data);
   }
 };
