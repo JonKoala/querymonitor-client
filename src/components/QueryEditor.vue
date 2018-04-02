@@ -10,9 +10,9 @@
         </v-tooltip>
         <v-tooltip top class="tool-btn">
           <v-btn v-on:click="inlineQuery()" flat slot="activator">
-            <v-icon>format_align_justify</v-icon>
+            <v-icon>vertical_align_center</v-icon>
           </v-btn>
-          <span>Alinhar</span>
+          <span>Comprimir</span>
         </v-tooltip>
         <v-tooltip top class="ml-5 tool-btn">
           <v-btn v-on:click="copyQuery()" flat slot="activator">
