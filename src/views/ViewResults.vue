@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid grid-list-md>
+  <v-container fluid grid-list-md v-bind:key="this.paramId">
     <v-card>
       <v-toolbar color="blue-grey" dense card>
         <v-toolbar-title class="white--text">{{ this.title }}</v-toolbar-title>
@@ -25,18 +25,30 @@ export default {
   data () {
     return {
       query: null,
-      results: [],
+      results: []
     };
   },
-  created() {
-    ApiService.get(`queries/${this.paramId}`).then((query) => {
-      this.query = query;
-      ApiService.get(`select/${this.query.corpo}`).then(results => { this.results = results; });
-    });
+  created () {
+    this.loadQueryResults();
+  },
+  methods: {
+    loadQueryResults () {
+      ApiService.get(`queries/${this.paramId}`).then((query) => {
+        this.query = query;
+        ApiService.get(`select/${this.query.corpo}`).then(results => {
+          this.results = results;
+        });
+      });
+    }
   },
   computed: {
-    title() {
+    title () {
       return (this.query) ? this.query.titulo : null;
+    }
+  },
+  watch: {
+    paramId: function(val) {
+      this.loadQueryResults();
     }
   }
 }
