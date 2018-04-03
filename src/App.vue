@@ -10,7 +10,7 @@
       <v-container fluid fill-height>
         <v-layout justify-center align-start>
           <v-slide-x-transition mode="out-in">
-            <query-creator class="mt-0"></query-creator>
+            <router-view class="mt-0"></router-view>
           </v-slide-x-transition>
         </v-layout>
       </v-container>
@@ -19,12 +19,7 @@
 </template>
 
 <script>
-import QueryCreator from 'views/QueryCreator'
-
 export default {
-  name: 'App',
-  components: {
-    QueryCreator
-  },
+  name: 'App'
 }
 </script>

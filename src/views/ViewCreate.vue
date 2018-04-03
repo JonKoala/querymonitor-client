@@ -36,7 +36,7 @@ import QueryEditor from 'components/QueryEditor'
 import ResultsTable from 'components/ResultsTable'
 
 export default {
-  name: 'QueryCreator',
+  name: 'ViewCreate',
   components: {
     QueryEditor,
     ResultsTable
