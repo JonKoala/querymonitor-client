@@ -13,7 +13,7 @@
 
 <script>
 export default {
-  name: 'QueryResults',
+  name: 'ResultsTable',
   props: {
     value: { type: Array }
   },

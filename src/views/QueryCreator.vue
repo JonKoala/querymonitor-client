@@ -21,7 +21,7 @@
           <v-toolbar color="blue-grey" dense card>
             <v-toolbar-title class="white--text">RESULTADO</v-toolbar-title>
           </v-toolbar>
-          <query-results v-model="results" class="pa-0"></query-results>
+          <results-table v-model="results" class="pa-0"></results-table>
         </v-card>
       </v-flex>
       <v-snackbar v-model="note" v-bind:timeout="3000" bottom right>Query salva com sucesso!</v-snackbar>
@@ -33,13 +33,13 @@
 import ApiService from 'services/api.service'
 
 import QueryEditor from 'components/QueryEditor'
-import QueryResults from 'components/QueryResults'
+import ResultsTable from 'components/ResultsTable'
 
 export default {
-  name: 'QueryCreation',
+  name: 'QueryCreator',
   components: {
     QueryEditor,
-    QueryResults
+    ResultsTable
   },
   data () {
     return {
