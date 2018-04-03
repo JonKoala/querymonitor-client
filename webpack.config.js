@@ -4,6 +4,9 @@ const path = require('path')
 const appconfig = require('./appconfig')
 
 module.exports = {
+  output: {
+    publicPath: '/'
+  },
   module: {
     rules: [
       {
