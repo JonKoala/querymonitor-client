@@ -3,32 +3,32 @@
     <v-toolbar dense dark card color="brown darken-1">
       <v-toolbar-items>
         <v-tooltip top class="tool-btn">
-          <v-btn v-on:click="indentQuery()" flat slot="activator">
+          <v-btn id="indent-btn" v-on:click="indentQuery()" flat slot="activator">
             <v-icon>format_align_left</v-icon>
           </v-btn>
           <span>Indentar</span>
         </v-tooltip>
         <v-tooltip top class="tool-btn">
-          <v-btn v-on:click="inlineQuery()" flat slot="activator">
+          <v-btn id="inline-btn" v-on:click="inlineQuery()" flat slot="activator">
             <v-icon>vertical_align_center</v-icon>
           </v-btn>
           <span>Comprimir</span>
         </v-tooltip>
         <v-tooltip top class="ml-5 tool-btn">
-          <v-btn v-on:click="copyQuery()" flat slot="activator">
+          <v-btn id="copy-btn" v-on:click="copyQuery()" flat slot="activator">
             <v-icon>content_copy</v-icon>
           </v-btn>
           <span>Copiar</span>
         </v-tooltip>
         <v-tooltip top class="tool-btn">
-          <v-btn v-on:click="clearQuery()" flat slot="activator">
+          <v-btn id="clear-btn" v-on:click="clearQuery()" flat slot="activator">
             <v-icon>delete</v-icon>
           </v-btn>
           <span>Limpar</span>
         </v-tooltip>
       </v-toolbar-items>
     </v-toolbar>
-    <v-text-field v-model="query" multi-line hide-details no-resize class="editor pa-2 blue-grey lighten-5"></v-text-field>
+    <v-text-field id="query-textarea" v-model="query" multi-line hide-details no-resize class="editor pa-2 blue-grey lighten-5"></v-text-field>
   </v-container>
 </template>
 
@@ -50,6 +50,9 @@ export default {
   },
   created () {
     this.query = this.value;
+
+    this.$watch('value', newValue => { this.query = newValue });
+    this.$watch('query', newQuery => { this.$emit('input', this.inlineQuery(newQuery)); });
   },
   methods: {
     indentQuery() {
@@ -71,11 +74,6 @@ export default {
     clearQuery() {
       this.copyQuery();
       this.query = null;
-    }
-  },
-  watch: {
-    query: function(val) {
-      this.$emit('input', this.inlineQuery(this.query));
     }
   }
 }
