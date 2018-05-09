@@ -7,6 +7,9 @@ import QueryEditor from 'components/QueryEditor'
 const localVue = createLocalVue();
 localVue.use(Vuetify);
 
+// disable annoying dependency warnings
+console.warn = function() {};
+
 
 describe('QueryEditor.vue', function() {
 

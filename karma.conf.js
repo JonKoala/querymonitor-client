@@ -8,6 +8,9 @@ module.exports = function (config) {
       'test/*.js': ['webpack', 'sourcemap']
     },
     webpack: require('./webpack.config.js'),
+    webpackMiddleware: {
+      stats: 'errors-only'
+    },
     reporters: ['spec'],
     browsers: ['Chrome']
   });
