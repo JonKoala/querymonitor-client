@@ -14,10 +14,11 @@ localVue.use(Vuetify);
 
 describe('ResultsTable.vue', function() {
 
-  let wrapper;
+  var wrapper;
 
   beforeEach(function() {
     wrapper = mount(ResultsTable, { localVue });
+    return wrapper.vm.$nextTick();
   });
 
   it('Should display an empty header if an empty array is passed', function() {
