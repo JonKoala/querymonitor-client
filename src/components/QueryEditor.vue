@@ -50,8 +50,7 @@ export default {
   },
   created () {
     this.query = this.value;
-
-    this.$watch('value', newValue => { this.query = newValue });
+    
     this.$watch('query', newQuery => { this.$emit('input', this.inlineQuery(newQuery)); });
   },
   methods: {
