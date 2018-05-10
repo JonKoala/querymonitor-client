@@ -11,17 +11,13 @@ function formatUrl(url) {
 }
 
 export default {
-  get(service, config) {
+  async get(service, config) {
     service = formatUrl(service);
-    return Vue.axios.get(`${appconfig['url']['api']}/${service}`, config)
-      .then(response => {
-        return response.data;
-      }).catch(err => {
-        throw new Error(`ApiService error: ${err}`);
-      });
+    var response = await Vue.axios.get(`${appconfig['url']['api']}/${service}`, config);
+    return response.data;
   },
-  post(service, data) {
+  async post(service, data) {
     service = formatUrl(service);
-    return Vue.axios.post(`${appconfig['url']['api']}/${service}`, data);
+    return await Vue.axios.post(`${appconfig['url']['api']}/${service}`, data);
   }
 };

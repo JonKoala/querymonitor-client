@@ -32,13 +32,9 @@ export default {
     this.loadQueryResults();
   },
   methods: {
-    loadQueryResults () {
-      ApiService.get(`queries/${this.paramId}`).then((query) => {
-        this.query = query;
-        ApiService.get(`select/${this.query.corpo}`).then(results => {
-          this.results = results;
-        });
-      });
+    async loadQueryResults () {
+      this.query = await ApiService.get(`queries/${this.paramId}`);
+      this.results = await ApiService.get(`select/${this.query.corpo}`);
     }
   },
   computed: {

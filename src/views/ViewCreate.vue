@@ -59,11 +59,12 @@ export default {
     }
   },
   methods: {
-    test() {
-      ApiService.get(`select/${this.query}`).then(results => { this.results = results; });
+    async test() {
+      this.results = await ApiService.get(`select/${this.query}`);
     },
-    save() {
-      ApiService.post('queries', { titulo: this.titulo, corpo: this.query }).then(() => { this.note = true; });
+    async save() {
+      await ApiService.post('queries', { titulo: this.titulo, corpo: this.query })
+      this.note = true;
     }
   }
 }
