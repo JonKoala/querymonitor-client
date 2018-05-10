@@ -14,7 +14,7 @@
     </v-navigation-drawer>
     <v-content>
       <v-container fluid fill-height>
-        <v-layout justify-center align-start>
+        <v-layout style="max-width:100%" justify-center align-start>
           <v-slide-x-transition mode="out-in">
             <router-view class="mt-0"></router-view>
           </v-slide-x-transition>
