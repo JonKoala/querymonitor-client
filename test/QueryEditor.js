@@ -35,7 +35,7 @@ describe('QueryEditor.vue', function() {
 
   describe('Inline button', function() {
 
-    it('should inline the query when clicked', function() {
+    it('Should inline the query when clicked', function() {
       var query = 'select\n  1 as col1,\n  2 as col2';
       wrapper.setData({query: query});
 
