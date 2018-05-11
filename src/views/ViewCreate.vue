@@ -2,7 +2,7 @@
   <v-container fluid grid-list-md>
     <v-layout row wrap>
       <v-flex xs4>
-        <v-card>
+        <v-card class="editor">
           <query-editor v-model="query" class="pa-0"></query-editor>
         </v-card>
       </v-flex>
@@ -79,3 +79,11 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+
+  .editor {
+    border-radius: 0px 0px 5px 5px;
+  }
+
+</style>

@@ -27,7 +27,7 @@ describe('QueryEditor.vue', function() {
       wrapper.setData({query: query});
 
       var indentedQuery = 'select\n  1 as col1,\n  2 as col2';
-      wrapper.find('#indent-btn').trigger('click');
+      wrapper.find('.toolbar__items span:nth-of-type(1) button').trigger('click');
       expect(wrapper.vm.$data.query).to.equal(indentedQuery);
     });
 
@@ -40,7 +40,7 @@ describe('QueryEditor.vue', function() {
       wrapper.setData({query: query});
 
       var inlinedQuery = 'select 1 as col1, 2 as col2';
-      wrapper.find('#inline-btn').trigger('click');
+      wrapper.find('.toolbar__items span:nth-of-type(2) button').trigger('click');
       expect(wrapper.vm.$data.query).to.equal(inlinedQuery);
     });
 
@@ -62,7 +62,7 @@ describe('QueryEditor.vue', function() {
     it('Should pass the query, inlined, as argument', function() {
       var query = 'select 1 as col1, 2 as col2';
       wrapper.setData({query: query});
-      wrapper.find('#indent-btn').trigger('click');
+      wrapper.find('.toolbar__items span:nth-of-type(1) button').trigger('click');
 
       expect(wrapper.emitted().input).to.be.an('array');
       expect(wrapper.emitted().input).to.have.lengthOf(2);

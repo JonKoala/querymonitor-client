@@ -3,43 +3,45 @@
     <v-toolbar dense dark card color="brown darken-1">
       <v-toolbar-items>
         <v-tooltip top class="tool-btn">
-          <v-btn id="indent-btn" v-on:click="indentQuery()" flat slot="activator">
+          <v-btn v-on:click="indentQuery()" flat slot="activator">
             <v-icon>format_align_left</v-icon>
           </v-btn>
           <span>Indentar</span>
         </v-tooltip>
         <v-tooltip top class="tool-btn">
-          <v-btn id="inline-btn" v-on:click="inlineQuery()" flat slot="activator">
+          <v-btn v-on:click="inlineQuery()" flat slot="activator">
             <v-icon>vertical_align_center</v-icon>
           </v-btn>
           <span>Comprimir</span>
         </v-tooltip>
         <v-tooltip top class="ml-5 tool-btn">
-          <v-btn id="copy-btn" v-on:click="copyQuery()" flat slot="activator">
+          <v-btn v-on:click="copyQuery()" flat slot="activator">
             <v-icon>content_copy</v-icon>
           </v-btn>
           <span>Copiar</span>
         </v-tooltip>
         <v-tooltip top class="tool-btn">
-          <v-btn id="clear-btn" v-on:click="clearQuery()" flat slot="activator">
+          <v-btn v-on:click="clearQuery()" flat slot="activator">
             <v-icon>delete</v-icon>
           </v-btn>
           <span>Limpar</span>
         </v-tooltip>
       </v-toolbar-items>
     </v-toolbar>
-    <v-text-field id="query-textarea" v-model="query" multi-line hide-details no-resize class="editor pa-2 blue-grey lighten-5"></v-text-field>
+    <query-notepad v-model="query" class="editor"></query-notepad>
   </v-container>
 </template>
 
 <script>
-import copyToClipboard from 'copy-to-clipboard'
-import sqlFormatter from 'sql-formatter'
+import NotepadService from 'services/notepad.service'
 
-import RegexCollection from 'services/regex.collection'
+import QueryNotepad from 'components/QueryNotepad'
 
 export default {
   name: 'QueryEditor',
+  components: {
+    QueryNotepad
+  },
   props: {
     value: { type: String }
   },
@@ -50,25 +52,18 @@ export default {
   },
   created () {
     this.query = this.value;
-    
-    this.$watch('query', newQuery => { this.$emit('input', this.inlineQuery(newQuery)); });
+
+    this.$watch('query', newQuery => { this.$emit('input', NotepadService.inline(newQuery)); });
   },
   methods: {
     indentQuery() {
-      this.query = (this.query) ? sqlFormatter.format(this.query) : null;
+      this.query = NotepadService.indent(this.query);
     },
-    inlineQuery(query) {
-      var toInline = query || this.query;
-
-      toInline = (toInline) ? toInline.replace(RegexCollection.newline, ' ').replace(RegexCollection.unquotedSpaces, ' ') : null;
-
-      if (query)
-        return toInline;
-      else
-        this.query = toInline;
+    inlineQuery() {
+      this.query = NotepadService.inline(this.query);
     },
     copyQuery() {
-      copyToClipboard(this.query);
+      NotepadService.toClipboard(this.query);
     },
     clearQuery() {
       this.copyQuery();
@@ -86,10 +81,6 @@ export default {
 
   .editor {
     border-radius: 0px 0px 5px 5px;
-  }
-
-  .editor >>> .input-group__details {
-    display: none;
   }
 
 </style>
