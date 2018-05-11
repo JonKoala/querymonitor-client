@@ -21,7 +21,7 @@
           <v-toolbar color="blue-grey" dense card>
             <v-toolbar-title class="white--text">RESULTADO</v-toolbar-title>
           </v-toolbar>
-          <results-table v-model="results" class="pa-0"></results-table>
+          <results-table v-model="results" v-bind:isLoading="isLoading" v-bind:error="errorMsg" class="pa-0"></results-table>
         </v-card>
       </v-flex>
       <v-snackbar v-model="note" v-bind:timeout="3000" bottom right>Query salva com sucesso!</v-snackbar>
@@ -46,7 +46,9 @@ export default {
       query: null,
       titulo: null,
       results: [],
+      errorMsg: null,
 
+      isLoading: false,
       note: false
     };
   },
@@ -60,7 +62,15 @@ export default {
   },
   methods: {
     async test() {
-      this.results = await ApiService.get(`select/${this.query}`);
+      this.isLoading = true;
+      try {
+        this.results = await ApiService.get(`select/${this.query}`);
+        this.errorMsg = null;
+      } catch(err) {
+        this.errorMsg = err.response.data.message;
+      } finally {
+        this.isLoading = false;
+      }
     },
     async save() {
       await ApiService.post('queries', { titulo: this.titulo, corpo: this.query })

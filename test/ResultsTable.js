@@ -11,6 +11,9 @@ const expect = chai.expect;
 const localVue = createLocalVue();
 localVue.use(Vuetify);
 
+// karma freaks out when i use the 'value' prop from ResultsTable, so i disable the console errors (errors are still detectable though)
+console.error = function() {};
+
 
 describe('ResultsTable.vue', function() {
 
@@ -21,25 +24,45 @@ describe('ResultsTable.vue', function() {
     return wrapper.vm.$nextTick();
   });
 
-  it('Should display an empty header if an empty array is passed', function() {
-    var dataToShow = []
-    wrapper.setProps({value: dataToShow});
+  it('Should display only a loading bar if isLoading is true', function() {
+    wrapper.setProps({isLoading: true});
 
-    var header = wrapper.find('thead tr');
-    expect(header.isEmpty()).to.be.true;
+    expect(wrapper.find('div.table-container').element.style.display).to.equal('none');
+    expect(wrapper.find('div.progress-linear').element.style.display).to.not.equal('none');
+    expect(wrapper.find('.alert.warning').element.style.display).to.equal('none');
+    expect(wrapper.find('.alert.error').element.style.display).to.equal('none');
   });
 
-  it('Should display an empty body if an empty array is passed', function() {
-    var dataToShow = []
-    wrapper.setProps({value: dataToShow});
+  it('Should display only a warning alert if an empty array is passed', function() {
+    wrapper.setProps({value: []});
 
-    var lines = wrapper.findAll('tbody tr');
-    expect(lines.length).to.equal(1);
-    expect(lines.at(0).text()).to.equal('No data available');
+    expect(wrapper.find('div.table-container').element.style.display).to.equal('none');
+    expect(wrapper.find('div.progress-linear').element.style.display).to.equal('none');
+    expect(wrapper.find('.alert.warning').element.style.display).to.not.equal('none');
+    expect(wrapper.find('.alert.error').element.style.display).to.equal('none');
+  });
+
+  it('Should display only an error alert if an error message is passed', function() {
+    wrapper.setProps({error: 'error message'});
+
+    expect(wrapper.find('div.table-container').element.style.display).to.equal('none');
+    expect(wrapper.find('div.progress-linear').element.style.display).to.equal('none');
+    expect(wrapper.find('.alert.warning').element.style.display).to.equal('none');
+    expect(wrapper.find('.alert.error').element.style.display).to.not.equal('none');
+  });
+
+  it('Should display only the results table if valid data is passed', function() {
+    var dataToShow = [{'col 1': 'val a', 'col 2': 'val b'}, {'col 1': 'val c', 'col 2': 'val d'}];
+    wrapper.setProps({ value: dataToShow });
+
+    expect(wrapper.find('div.table-container').element.style.display).to.not.equal('none');
+    expect(wrapper.find('div.progress-linear').element.style.display).to.equal('none');
+    expect(wrapper.find('.alert.warning').element.style.display).to.equal('none');
+    expect(wrapper.find('.alert.error').element.style.display).to.equal('none');
   });
 
   it('Should name the header columns after the passed array objecs\' keys', function() {
-    var dataToShow = [{'col 1': 'val a', 'col 2': 'val b'}, {'col 1': 'val c', 'col 2': 'val d'}]
+    var dataToShow = [{'col 1': 'val a', 'col 2': 'val b'}, {'col 1': 'val c', 'col 2': 'val d'}];
     wrapper.setProps({ value: dataToShow });
 
     var columns = wrapper.find('thead tr').findAll('th');
