@@ -2,25 +2,25 @@
   <v-container>
     <v-toolbar dense dark card color="brown darken-1">
       <v-toolbar-items>
-        <v-tooltip top class="tool-btn">
+        <v-tooltip top>
           <v-btn v-on:click="indentQuery()" flat slot="activator">
             <v-icon>format_align_left</v-icon>
           </v-btn>
           <span>Indentar</span>
         </v-tooltip>
-        <v-tooltip top class="tool-btn">
+        <v-tooltip top>
           <v-btn v-on:click="inlineQuery()" flat slot="activator">
             <v-icon>vertical_align_center</v-icon>
           </v-btn>
           <span>Comprimir</span>
         </v-tooltip>
-        <v-tooltip top class="ml-5 tool-btn">
+        <v-tooltip top class="ml-5">
           <v-btn v-on:click="copyQuery()" flat slot="activator">
             <v-icon>content_copy</v-icon>
           </v-btn>
           <span>Copiar</span>
         </v-tooltip>
-        <v-tooltip top class="tool-btn">
+        <v-tooltip top>
           <v-btn v-on:click="clearQuery()" flat slot="activator">
             <v-icon>delete</v-icon>
           </v-btn>
@@ -28,7 +28,7 @@
         </v-tooltip>
       </v-toolbar-items>
     </v-toolbar>
-    <query-notepad v-model="query" class="editor"></query-notepad>
+    <query-notepad v-model="query" class="editor" v-bind:style="{height: height + 'px'}" ></query-notepad>
   </v-container>
 </template>
 
@@ -43,7 +43,8 @@ export default {
     QueryNotepad
   },
   props: {
-    value: { type: String }
+    value: { type: String },
+    height: { type: Number, default: 140 }
   },
   data () {
     return {
