@@ -28,7 +28,7 @@
         </v-tooltip>
       </v-toolbar-items>
     </v-toolbar>
-    <query-notepad v-model="query" class="editor" v-bind:style="{height: height + 'px'}" ></query-notepad>
+    <query-notepad v-model="query" class="editor" v-bind:style="{height:height}"></query-notepad>
   </v-container>
 </template>
 
@@ -44,7 +44,7 @@ export default {
   },
   props: {
     value: { type: String },
-    height: { type: Number, default: 140 }
+    height: { type: String, default: '140px' }
   },
   data () {
     return {
@@ -54,7 +54,7 @@ export default {
   created () {
     this.query = this.value;
 
-    this.$watch('query', newQuery => { this.$emit('input', NotepadService.inline(newQuery)); });
+    this.$watch('query', newQuery => { this.$emit('input', newQuery); });
   },
   methods: {
     indentQuery() {

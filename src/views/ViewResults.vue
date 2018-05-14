@@ -11,6 +11,7 @@
 
 <script>
 import ApiService from 'services/api.service'
+import NotepadService from 'services/notepad.service'
 
 import ResultsTable from 'components/ResultsTable'
 
@@ -24,7 +25,7 @@ export default {
   },
   data () {
     return {
-      query: null,
+      queryObj: null,
       results: []
     };
   },
@@ -33,13 +34,15 @@ export default {
   },
   methods: {
     async loadQueryResults () {
-      this.query = await ApiService.get(`queries/${this.paramId}`);
-      this.results = await ApiService.get(`select/${this.query.corpo}`);
+      this.queryObj = await ApiService.get(`queries/${this.paramId}`);
+
+      var inlineQuery = NotepadService.inline(this.queryObj.corpo);
+      this.results = await ApiService.get(`select/${inlineQuery}`);
     }
   },
   computed: {
     title () {
-      return (this.query) ? this.query.titulo : null;
+      return (this.queryObj) ? this.queryObj.titulo : null;
     }
   },
   watch: {

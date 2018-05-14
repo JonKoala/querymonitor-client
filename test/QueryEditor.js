@@ -59,19 +59,6 @@ describe('QueryEditor.vue', function() {
       expect(wrapper.emitted().input).to.have.lengthOf(2);
     });
 
-    it('Should pass the query, inlined, as argument', function() {
-      var query = 'select 1 as col1, 2 as col2';
-      wrapper.setData({query: query});
-      wrapper.find('.toolbar__items span:nth-of-type(1) button').trigger('click');
-
-      expect(wrapper.emitted().input).to.be.an('array');
-      expect(wrapper.emitted().input).to.have.lengthOf(2);
-      expect(wrapper.emitted().input[1]).to.be.an('array');
-      expect(wrapper.emitted().input[1]).to.have.lengthOf(1);
-      expect(wrapper.emitted().input[1][0]).to.be.an('string');
-      expect(wrapper.emitted().input[1][0]).to.equal(query);
-    });
-
   });
 
 });
