@@ -2,7 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 
 import ViewHome from 'views/ViewHome'
-import ViewCreate from 'views/ViewCreate'
+import ViewSandbox from 'views/ViewSandbox'
 import ViewResults from 'views/ViewResults'
 
 
@@ -11,9 +11,9 @@ Vue.use(VueRouter)
 export default new VueRouter({
   routes: [
     {
-      name: 'create',
-      path: '/create',
-      component: ViewCreate
+      name: 'sandbox',
+      path: '/sandbox',
+      component: ViewSandbox
     },
     {
       name: 'home',

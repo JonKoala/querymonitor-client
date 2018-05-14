@@ -38,7 +38,7 @@ export default {
     return {
       generalLinks: [
         { text: 'HOME', icon: 'home', href: '/' },
-        { text: 'NOVA QUERY', icon: 'note_add', href: '/create' }
+        { text: 'SANDBOX', icon: 'note_add', href: '/sandbox' }
       ],
       queryLinks: []
     }
