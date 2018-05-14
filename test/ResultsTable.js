@@ -24,13 +24,10 @@ describe('ResultsTable.vue', function() {
     return wrapper.vm.$nextTick();
   });
 
-  it('Should display only a loading bar if isLoading is true', function() {
+  it('Should display a loading bar if isLoading is true', function() {
     wrapper.setProps({isLoading: true});
 
-    expect(wrapper.find('div.table-container').element.style.display).to.equal('none');
     expect(wrapper.find('div.progress-linear').element.style.display).to.not.equal('none');
-    expect(wrapper.find('.alert.warning').element.style.display).to.equal('none');
-    expect(wrapper.find('.alert.error').element.style.display).to.equal('none');
   });
 
   it('Should display only a warning alert if an empty array is passed', function() {
