@@ -120,10 +120,8 @@ export default {
     onSaveLoading(isLoading) {
       this.saveMenuLoading = isLoading;
     },
-    onSaveSuccess() {
-      this.notificationText = "Query salva com sucesso!";
-      this.saveMenu = false;
-      this.notification = true;
+    onSaveSuccess(savedQuery) {
+      this.$router.push({name: 'results', params: {id: savedQuery.id}});
     },
     onSaveError(err) {
       this.notificationText = "Ocorreu um erro ao tentar salvar a query...";
