@@ -22,9 +22,8 @@ export default new VueRouter({
     },
     {
       name: 'results',
-      path: '/results/:paramId',
-      component: ViewResults,
-      props: true
+      path: '/results/:id',
+      component: ViewResults
     }
   ],
   mode: 'history'

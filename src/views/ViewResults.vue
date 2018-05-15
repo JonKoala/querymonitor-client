@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid grid-list-md v-bind:key="this.paramId">
+  <v-container fluid grid-list-md>
     <v-card>
       <v-toolbar color="blue-grey" dense card>
         <v-toolbar-title class="white--text">{{ this.title }}</v-toolbar-title>
@@ -20,9 +20,6 @@ export default {
   components: {
     ResultsTable
   },
-  props: {
-    paramId: { type: String }
-  },
   data () {
     return {
       queryObj: null,
@@ -41,12 +38,15 @@ export default {
     }
   },
   computed: {
+    paramId () {
+      return this.$route.params.id;
+    },
     title () {
       return (this.queryObj) ? this.queryObj.titulo : null;
     }
   },
   watch: {
-    paramId: function(val) {
+    paramId: function() {
       this.loadQueryResults();
     }
   }
