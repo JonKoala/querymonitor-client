@@ -3,7 +3,7 @@
     <v-progress-linear v-show="showLoadingBar" class="my-0" color="blue" indeterminate></v-progress-linear>
     <v-data-table class="table-container"
       v-show="showTable"
-      v-bind:items="value"
+      v-bind:items="items"
       v-bind:headers="headers"
       hide-actions>
       <template slot="items" slot-scope="props">
@@ -19,17 +19,20 @@
 export default {
   name: 'ResultsTable',
   props: {
-    value: { type: Array, default: function () { return []; } },
+    value: { type: Array },
     isLoading: { type: Boolean },
     error: { type: String }
   },
   computed: {
+    isNull () {
+      return this.value == null;
+    },
     isEmpty () {
-      return !this.value || this.value.length === 0;
+      return this.value instanceof Array && this.value.length === 0;
     },
 
     showTable () {
-      return !this.error && !this.isEmpty;
+      return !this.error && !this.isNull && !this.isEmpty;
     },
     showLoadingBar () {
       return this.isLoading;
@@ -41,8 +44,11 @@ export default {
       return !this.error && this.isEmpty;
     },
 
+    items () {
+      return (this.isNull) ? [] : this.value;
+    },
     headers () {
-      if (this.isEmpty)
+      if (this.isNull || this.isEmpty)
         return [];
 
       var sample = this.value[0];
