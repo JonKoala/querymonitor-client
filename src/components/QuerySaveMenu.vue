@@ -63,7 +63,7 @@ export default {
 
       try {
         var saved = await ApiService.post('queries', { titulo: this.titulo, corpo: this.value });
-        this.$emit('success', saved);
+        this.$emit('success', saved.data);
       } catch(err) {
         this.$emit('error', err);
       } finally {
