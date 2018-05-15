@@ -79,7 +79,7 @@ export default {
 
       // query & results
       query: null,
-      results: [],
+      results: null,
       errorMsg: null,
       isLoading: false,
 
