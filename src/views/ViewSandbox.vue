@@ -21,7 +21,7 @@
             </v-menu>
 
             <v-tooltip top>
-              <v-btn slot="activator" v-on:click="runQuery()" v-bind:disabled="!this.isRunnable" icon class="ma-0">
+              <v-btn slot="activator" v-on:click="runQuery" v-bind:disabled="!this.isRunnable" icon class="ma-0">
                 <v-icon color="white">cached</v-icon>
               </v-btn>
               <span>Testar</span>
@@ -40,7 +40,7 @@
 
           </v-toolbar>
 
-          <results-table v-model="results" v-bind:isLoading="isLoading" v-bind:error="errorMsg" class="pa-0"></results-table>
+          <results-table v-model="selectResult" v-bind:isLoading="isLoading" v-bind:error="selectError" class="pa-0"></results-table>
 
         </v-card>
       </v-flex>
@@ -60,8 +60,10 @@
 </template>
 
 <script>
-import ApiService from 'services/api.service'
-import NotepadService from 'services/notepad.service'
+import { mapGetters } from 'vuex'
+
+import { EXECUTE_SELECT } from 'store/actions.type'
+import { RESET_SELECT_STATE } from 'store/mutations.type'
 
 import QueryEditor from 'components/QueryEditor'
 import QuerySaveMenu from 'components/QuerySaveMenu'
@@ -74,13 +76,11 @@ export default {
     QuerySaveMenu,
     ResultsTable
   },
-  data() {
+  data () {
     return {
 
       // query & results
       query: null,
-      results: null,
-      errorMsg: null,
       isLoading: false,
 
       // menus
@@ -93,37 +93,42 @@ export default {
       notificationText: null
     };
   },
-  mounted() {
+  created () {
+    this.$store.commit(RESET_SELECT_STATE);
+  },
+  mounted () {
     window.setTimeout(() => { this.editorMenu = true; }, 200);
   },
   computed: {
-    isRunnable() {
+    ...mapGetters([
+      'selectResult',
+      'selectError',
+    ]),
+    isRunnable () {
       return Boolean(this.query);
     }
   },
   methods: {
-    async runQuery() {
+    async runQuery () {
       this.isLoading = true;
 
       try {
-        var inlineQuery = NotepadService.inline(this.query);
-        this.results = await ApiService.get(`select/${inlineQuery}`);
-        this.errorMsg = null;
+        await this.$store.dispatch(EXECUTE_SELECT, this.query);
       } catch(err) {
-        this.errorMsg = err.response.data.message;
+        console.log(err);
       } finally {
         this.isLoading = false;
       }
     },
 
     // saveMenu events
-    onSaveLoading(isLoading) {
+    onSaveLoading (isLoading) {
       this.saveMenuLoading = isLoading;
     },
-    onSaveSuccess(savedQuery) {
+    onSaveSuccess (savedQuery) {
       this.$router.push({name: 'results', params: {id: savedQuery.id}});
     },
-    onSaveError(err) {
+    onSaveError (err) {
       this.notificationText = "Ocorreu um erro ao tentar salvar a query...";
       this.saveMenu = false;
       this.notification = true;
