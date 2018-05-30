@@ -2,16 +2,17 @@
   <v-container fluid grid-list-md>
     <v-card>
       <v-toolbar color="blue-grey" dense card>
-        <v-toolbar-title class="white--text">{{ this.title }}</v-toolbar-title>
+        <v-toolbar-title class="white--text">{{ this.queryTitle }}</v-toolbar-title>
       </v-toolbar>
-      <results-table v-model="this.results" class="pa-0"></results-table>
+      <results-table v-model="selectResult" v-bind:isLoading="isLoading" v-bind:error="selectError" class="pa-0"></results-table>
     </v-card>
   </v-container>
 </template>
 
 <script>
-import ApiService from 'services/api.service'
-import NotepadService from 'services/notepad.service'
+import { mapGetters } from 'vuex'
+
+import { EXECUTE_SELECT, FETCH_QUERY } from 'store/actions.type'
 
 import ResultsTable from 'components/ResultsTable'
 
@@ -22,8 +23,7 @@ export default {
   },
   data () {
     return {
-      queryObj: null,
-      results: []
+      isLoading: false
     };
   },
   created () {
@@ -31,18 +31,27 @@ export default {
   },
   methods: {
     async loadQueryResults () {
-      this.queryObj = await ApiService.get(`queries/${this.paramId}`);
+      this.isLoading = true;
 
-      var inlineQuery = NotepadService.inline(this.queryObj.corpo);
-      this.results = await ApiService.get(`select/${inlineQuery}`);
+      try {
+        await this.$store.dispatch(FETCH_QUERY, this.paramId);
+        await this.$store.dispatch(EXECUTE_SELECT, this.queryBody);
+      } catch(err) {
+        console.log(err);
+      } finally {
+        this.isLoading = false;
+      }
     }
   },
   computed: {
+    ...mapGetters([
+      'queryBody',
+      'queryTitle',
+      'selectResult',
+      'selectError',
+    ]),
     paramId () {
       return this.$route.params.id;
-    },
-    title () {
-      return (this.queryObj) ? this.queryObj.titulo : null;
     }
   },
   watch: {
