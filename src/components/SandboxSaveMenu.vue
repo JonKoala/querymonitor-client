@@ -7,7 +7,7 @@
     <v-container fluid grid-list-md>
       <v-layout row wrap>
         <v-flex xs7>
-          <query-notepad v-model="value" readonly v-bind:style="{height: '200px'}"></query-notepad>
+          <base-notepad v-model="value" readonly v-bind:style="{height: '200px'}"></base-notepad>
         </v-flex>
         <v-flex xs5>
           <v-container fill-height class="pa-0">
@@ -31,16 +31,16 @@
 <script>
 import ApiService from 'services/api.service'
 
-import QueryNotepad from 'components/QueryNotepad'
+import BaseNotepad from 'components/BaseNotepad'
 
 export default {
-  name: 'QuerySaveMenu',
+  name: 'SandboxSaveMenu',
   props: {
     value: { type: String },
     edit: { type: Boolean }
   },
   components: {
-    QueryNotepad
+    BaseNotepad
   },
   data() {
     return {

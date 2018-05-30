@@ -4,7 +4,7 @@
 
 <script>
 export default {
-  name: 'QueryNotepad',
+  name: 'BaseNotepad',
   props: {
     value: { type: String },
     readonly: { type: Boolean }

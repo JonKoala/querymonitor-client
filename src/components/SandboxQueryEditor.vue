@@ -28,19 +28,19 @@
         </v-tooltip>
       </v-toolbar-items>
     </v-toolbar>
-    <query-notepad v-model="query" class="editor" v-bind:style="{height:height}"></query-notepad>
+    <base-notepad v-model="query" class="editor" v-bind:style="{height:height}"></base-notepad>
   </v-container>
 </template>
 
 <script>
 import NotepadService from 'services/notepad.service'
 
-import QueryNotepad from 'components/QueryNotepad'
+import BaseNotepad from 'components/BaseNotepad'
 
 export default {
-  name: 'QueryEditor',
+  name: 'SandboxQueryEditor',
   components: {
-    QueryNotepad
+    BaseNotepad
   },
   props: {
     value: { type: String },

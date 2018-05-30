@@ -4,7 +4,7 @@
       <v-toolbar color="blue-grey" dense card>
         <v-toolbar-title class="white--text">{{ this.queryTitle }}</v-toolbar-title>
       </v-toolbar>
-      <results-table v-model="selectResult" v-bind:isLoading="isLoading" v-bind:error="selectError" class="pa-0"></results-table>
+      <base-results-table v-model="selectResult" v-bind:isLoading="isLoading" v-bind:error="selectError" class="pa-0"></base-results-table>
     </v-card>
   </v-container>
 </template>
@@ -14,12 +14,12 @@ import { mapGetters } from 'vuex'
 
 import { EXECUTE_SELECT, FETCH_QUERY } from 'store/actions.type'
 
-import ResultsTable from 'components/ResultsTable'
+import BaseResultsTable from 'components/BaseResultsTable'
 
 export default {
   name: 'ViewResults',
   components: {
-    ResultsTable
+    BaseResultsTable
   },
   data () {
     return {

@@ -17,7 +17,7 @@
 
 <script>
 export default {
-  name: 'ResultsTable',
+  name: 'BaseResultsTable',
   props: {
     value: { type: Array },
     isLoading: { type: Boolean },
