@@ -63,7 +63,7 @@
 import { mapGetters } from 'vuex'
 
 import { EXECUTE_SELECT } from 'store/actions.type'
-import { RESET_SELECT_STATE } from 'store/mutations.type'
+import { RESET_QUERY_STATE, RESET_SELECT_STATE, SET_QUERY_BODY } from 'store/mutations.type'
 
 import BaseResultsTable from 'components/BaseResultsTable'
 import SandboxQueryEditor from 'components/SandboxQueryEditor'
@@ -94,13 +94,17 @@ export default {
     };
   },
   created () {
+    this.$store.commit(RESET_QUERY_STATE);
     this.$store.commit(RESET_SELECT_STATE);
+
+    this.$watch('query', newQuery => { this.$store.commit(SET_QUERY_BODY, newQuery); });
   },
   mounted () {
     window.setTimeout(() => { this.editorMenu = true; }, 200);
   },
   computed: {
     ...mapGetters([
+      'queryId',
       'selectResult',
       'selectError',
     ]),
@@ -125,8 +129,8 @@ export default {
     onSaveLoading (isLoading) {
       this.saveMenuLoading = isLoading;
     },
-    onSaveSuccess (savedQuery) {
-      this.$router.push({name: 'results', params: {id: savedQuery.id}});
+    onSaveSuccess () {
+      this.$router.push({name: 'results', params: {id: this.queryId}});
     },
     onSaveError (err) {
       this.notificationText = "Ocorreu um erro ao tentar salvar a query...";

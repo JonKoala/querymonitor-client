@@ -1,6 +1,7 @@
 export const RESET_QUERY_STATE = 'resetQueryState'
 export const RESET_SELECT_STATE = 'resetSelectState'
 export const SET_QUERY_BODY = 'setQueryBody'
+export const SET_QUERY_ID = 'setQueryId'
 export const SET_QUERY_TITLE = 'setQueryTitle'
 export const SET_SELECT_ERROR = 'setSelectError'
 export const SET_SELECT_LINES = 'setSelectLines'

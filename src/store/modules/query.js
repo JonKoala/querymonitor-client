@@ -2,11 +2,12 @@ import Vue from 'vue'
 
 import ApiService from 'services/api.service'
 
-import { FETCH_QUERY } from 'store/actions.type'
-import { RESET_QUERY_STATE, SET_QUERY_BODY, SET_QUERY_TITLE } from 'store/mutations.type'
+import { FETCH_QUERY, SAVE_QUERY } from 'store/actions.type'
+import { RESET_QUERY_STATE, SET_QUERY_BODY, SET_QUERY_ID, SET_QUERY_TITLE } from 'store/mutations.type'
 
 
 const initialState = {
+  id: null, // Number
   body: null, // Array
   title: null // String
 }
@@ -14,6 +15,9 @@ const state = Object.assign({}, initialState)
 
 const getters = {
 
+  queryId(state) {
+    return state.id;
+  },
   queryBody (state) {
     return state.body;
   },
@@ -25,6 +29,9 @@ const getters = {
 
 const mutations = {
 
+  [SET_QUERY_ID] (state, id) {
+    state.id = id;
+  },
   [SET_QUERY_BODY] (state, body) {
     state.body = body;
   },
@@ -45,8 +52,20 @@ const actions = {
     commit(RESET_QUERY_STATE);
 
     var query = await ApiService.get(`queries/${id}`);
+    commit(SET_QUERY_ID, query.id);
     commit(SET_QUERY_BODY, query.corpo);
     commit(SET_QUERY_TITLE, query.titulo);
+  },
+  async [SAVE_QUERY] ({ getters, commit }) {
+    var saved = null;
+    if (getters.queryId)
+      saved = await ApiService.put('queries', { id: getters.queryId, corpo: getters.queryBody, titulo: getters.queryTitle });
+    else
+      saved = await ApiService.post('queries', { corpo: getters.queryBody, titulo: getters.queryTitle });
+
+    commit(SET_QUERY_ID, saved.data.id);
+    commit(SET_QUERY_BODY, saved.data.corpo);
+    commit(SET_QUERY_TITLE, saved.data.titulo);
   }
 
 }
