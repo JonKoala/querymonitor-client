@@ -1,7 +1,8 @@
+const ConfigWebpackPlugin = require("config-webpack")
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const path = require('path')
 
-const appconfig = require('./appconfig')
+const config = require('config')
 
 module.exports = {
   output: {
@@ -21,10 +22,6 @@ module.exports = {
         test: /\.js$/,
         loader: 'babel-loader',
         exclude: /node_modules/
-      },
-      {
-        test: /\.(yml|yaml)$/,
-        loader: 'js-yaml-loader'
       },
       {
         test: /\.(png|jpg|gif|svg|ico)$/,
@@ -47,9 +44,10 @@ module.exports = {
     historyApiFallback: true,
     noInfo: true,
     overlay: true,
-	  port: appconfig['server']['port']
+	  port: config.get('server.port')
   },
   plugins: [
+    new ConfigWebpackPlugin(),
     new HtmlWebpackPlugin({
       template: 'index.html'
     })
