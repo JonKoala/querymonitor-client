@@ -6,6 +6,8 @@ import select from './modules/select'
 
 import results from './views/results'
 import { NAMESPACE as resultsNamespace } from './views/results.type'
+import sandbox from './views/sandbox'
+import { NAMESPACE as sandboxNamespace } from './views/sandbox.type'
 
 
 Vue.use(Vuex)
@@ -15,6 +17,7 @@ export default new Vuex.Store({
     query,
     select,
 
-    [resultsNamespace]: results
+    [resultsNamespace]: results,
+    [sandboxNamespace]: sandbox
   }
 })

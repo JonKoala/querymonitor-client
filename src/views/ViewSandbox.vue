@@ -6,7 +6,7 @@
 
           <v-toolbar color="blue-grey" dense card>
 
-          <v-menu v-model="editorMenu" transition="slide-y-transition" bottom offset-y
+          <v-menu v-model="showingEditorMenu" transition="slide-y-transition" bottom offset-y
           v-bind:close-on-content-click="false"
           v-bind:nudge-width="400"
           v-bind:nudge-bottom="10"
@@ -21,7 +21,7 @@
           </v-menu>
 
           <v-tooltip top>
-            <v-btn slot="activator" v-on:click="runQuery" v-bind:disabled="!this.isRunnable" icon class="ma-0">
+            <v-btn slot="activator" v-on:click="executeQuery" v-bind:disabled="!this.isRunnable" icon class="ma-0">
               <v-icon color="white">cached</v-icon>
             </v-btn>
             <span>Testar</span>
@@ -32,7 +32,7 @@
           <v-spacer></v-spacer>
 
           <v-tooltip top>
-            <v-btn slot="activator" v-on:click="saveMenu = true" v-bind:disabled="!this.isRunnable" icon class="ma-0">
+            <v-btn slot="activator" v-on:click="showingSaveMenu = true" v-bind:disabled="!this.isRunnable" icon class="ma-0">
               <v-icon color="white">save</v-icon>
             </v-btn>
             <span>Salvar</span>
@@ -40,16 +40,16 @@
 
           </v-toolbar>
 
-          <base-results-table v-model="selectResult" v-bind:isLoading="isLoading" v-bind:error="selectError" class="pa-0"></base-results-table>
+          <base-results-table v-model="selectResult"  v-bind:error="selectError" v-bind:isLoading="isExecutingQuery" class="pa-0"></base-results-table>
 
         </v-card>
       </v-flex>
 
-      <v-dialog v-model="saveMenu" v-bind:persistent="saveMenuLoading" max-width="600px">
-        <sandbox-save-menu v-on:loading="onSaveLoading" v-on:success="onSaveSuccess" v-on:error="onSaveError"></sandbox-save-menu>
+      <v-dialog v-model="showingSaveMenu" v-bind:persistent="isSaving" max-width="600px">
+        <sandbox-save-menu v-on:save="saveQuery"></sandbox-save-menu>
       </v-dialog>
 
-      <v-snackbar v-model="notification" v-bind:timeout="3000" bottom right>{{ notificationText }}</v-snackbar>
+      <v-snackbar v-model="showingNotification" v-bind:timeout="3000" bottom right>{{ notificationText }}</v-snackbar>
 
     </v-layout>
   </v-container>
@@ -58,8 +58,7 @@
 <script>
 import { mapGetters } from 'vuex'
 
-import { EXECUTE_SELECT } from 'store/actions.type'
-import { RESET_QUERY_STATE, RESET_SELECT_STATE, SET_QUERY_BODY } from 'store/mutations.type'
+import { NAMESPACE, EXECUTE_QUERY, SAVE_LOCAL_QUERY, START_SANDBOX } from 'store/views/sandbox.type'
 
 import BaseResultsTable from 'components/BaseResultsTable'
 import SandboxQueryEditor from 'components/SandboxQueryEditor'
@@ -74,26 +73,18 @@ export default {
   },
   data () {
     return {
+      showingEditorMenu: false,
+      showingSaveMenu: false,
+      showingNotification: false,
 
-      // loading
-      isLoading: false,
-      saveMenuLoading: false,
-
-      // menus
-      editorMenu: false,
-      saveMenu: false,
-
-      // notifications
-      notification: false,
       notificationText: null
     };
   },
   created () {
-    this.$store.commit(RESET_QUERY_STATE);
-    this.$store.commit(RESET_SELECT_STATE);
+    this.$store.dispatch(`${NAMESPACE}/${START_SANDBOX}`);
   },
   mounted () {
-    window.setTimeout(() => { this.editorMenu = true; }, 200);
+    window.setTimeout(() => { this.showingEditorMenu = true; }, 200);
   },
   computed: {
     ...mapGetters([
@@ -102,35 +93,34 @@ export default {
       'selectResult',
       'selectError',
     ]),
+    ...mapGetters(NAMESPACE, [
+      'isExecutingQuery',
+      'isSaving'
+    ]),
     isRunnable () {
       return Boolean(this.queryBody);
     }
   },
   methods: {
-    async runQuery () {
-      this.isLoading = true;
-
+    notifyUser (text) {
+      this.notificationText = text;
+      this.showingNotification = true;
+    },
+    async executeQuery () {
       try {
-        await this.$store.dispatch(EXECUTE_SELECT, this.queryBody);
+        await this.$store.dispatch(`${NAMESPACE}/${EXECUTE_QUERY}`);
       } catch(err) {
-        console.log(err);
-      } finally {
-        this.isLoading = false;
+        this.notifyUser('Ocorreu um erro ao tentar executar a query...');
       }
     },
-
-    // saveMenu events
-    onSaveLoading (isLoading) {
-      this.saveMenuLoading = isLoading;
-    },
-    onSaveSuccess () {
-      this.$router.push({name: 'results', params: {id: this.queryId}});
-    },
-    onSaveError (err) {
-      this.notificationText = "Ocorreu um erro ao tentar salvar a query...";
-      this.saveMenu = false;
-      this.notification = true;
-      console.log(err);
+    async saveQuery () {
+      try {
+        await this.$store.dispatch(`${NAMESPACE}/${SAVE_LOCAL_QUERY}`);
+        this.$router.push({name: 'results', params: {id: this.queryId}});
+      } catch(err) {
+        this.showingSaveMenu = false;
+        this.notifyUser('Ocorreu um erro ao tentar salvar a query...');
+      }
     }
   }
 }

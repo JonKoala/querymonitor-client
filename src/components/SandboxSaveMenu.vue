@@ -1,9 +1,9 @@
 <template>
   <v-card>
     <v-toolbar color="blue-grey" dense card>
-      <v-toolbar-title class="white--text">{{ menuTitle }}</v-toolbar-title>
+      <v-toolbar-title class="white--text">SALVAR QUERY</v-toolbar-title>
     </v-toolbar>
-    <v-progress-linear v-bind:active="isLoading" class="my-0" color="blue" indeterminate></v-progress-linear>
+    <v-progress-linear v-bind:active="isSaving" class="my-0" color="blue" indeterminate></v-progress-linear>
     <v-container fluid grid-list-md>
       <v-layout row wrap>
         <v-flex xs7>
@@ -13,10 +13,10 @@
           <v-container fill-height class="pa-0">
             <v-layout column>
               <v-flex xs10>
-                <v-text-field v-bind:value="queryTitle" v-bind:disabled="isLoading" v-on:input="onTitleInput" label="Título" hide-details class="pb-4"></v-text-field>
+                <v-text-field v-bind:value="queryTitle" v-bind:disabled="isSaving" v-on:input="onTitleInput" label="Título" hide-details class="pb-4"></v-text-field>
               </v-flex>
               <v-flex xs2 class="pb-0">
-                <v-btn v-on:click="save" v-bind:disabled="!isSavable || isLoading" color="ma-0 blue white--text">
+                <v-btn v-on:click="onSaveClick" v-bind:disabled="!isSavable" color="ma-0 blue white--text">
                   <v-icon left color="white">save</v-icon>salvar
                 </v-btn>
               </v-flex>
@@ -31,50 +31,31 @@
 <script>
 import { mapGetters } from 'vuex'
 
-import { SAVE_QUERY } from 'store/actions.type'
+import { NAMESPACE } from 'store/views/sandbox.type'
 import { SET_QUERY_TITLE } from 'store/mutations.type'
 
 import BaseNotepad from 'components/BaseNotepad'
 
 export default {
   name: 'SandboxSaveMenu',
-  props: {
-    edit: { type: Boolean }
-  },
   components: {
     BaseNotepad
-  },
-  data () {
-    return {
-      isLoading: false
-    };
   },
   computed: {
     ...mapGetters([
       'queryTitle',
       'queryBody',
     ]),
-    menuTitle () {
-      return (this.edit) ? 'EDITAR QUERY' : 'SALVAR QUERY';
-    },
+    ...mapGetters(NAMESPACE, [
+      'isSaving'
+    ]),
     isSavable () {
-      return Boolean(this.queryBody) && Boolean(this.queryTitle);
+      return Boolean(this.queryBody) && Boolean(this.queryTitle) && !this.isSaving;
     }
   },
   methods: {
-    async save () {
-      this.isLoading = true;
-      this.$emit('loading', true);
-
-      try {
-        await this.$store.dispatch(SAVE_QUERY);
-        this.$emit('success');
-      } catch(err) {
-        this.$emit('error', err);
-      } finally {
-        this.isLoading = false;
-        this.$emit('loading', false);
-      }
+    onSaveClick () {
+      this.$emit('save');
     },
     onTitleInput (newTitle) {
       this.$store.commit(SET_QUERY_TITLE, newTitle);
