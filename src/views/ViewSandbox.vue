@@ -17,7 +17,7 @@
               </v-btn>
               <span>Query</span>
             </v-tooltip>
-            <sandbox-query-editor v-model="query" class="pa-0" height="300px"></sandbox-query-editor>
+            <sandbox-query-editor class="pa-0" height="300px"></sandbox-query-editor>
           </v-menu>
 
           <v-tooltip top>
@@ -46,11 +46,7 @@
       </v-flex>
 
       <v-dialog v-model="saveMenu" v-bind:persistent="saveMenuLoading" max-width="600px">
-        <sandbox-save-menu v-model="query"
-          v-on:loading="onSaveLoading"
-          v-on:success="onSaveSuccess"
-          v-on:error="onSaveError">
-        </sandbox-save-menu>
+        <sandbox-save-menu v-on:loading="onSaveLoading" v-on:success="onSaveSuccess" v-on:error="onSaveError"></sandbox-save-menu>
       </v-dialog>
 
       <v-snackbar v-model="notification" v-bind:timeout="3000" bottom right>{{ notificationText }}</v-snackbar>
@@ -79,14 +75,13 @@ export default {
   data () {
     return {
 
-      // query & results
-      query: null,
+      // loading
       isLoading: false,
+      saveMenuLoading: false,
 
       // menus
       editorMenu: false,
       saveMenu: false,
-      saveMenuLoading: false,
 
       // notifications
       notification: false,
@@ -96,8 +91,6 @@ export default {
   created () {
     this.$store.commit(RESET_QUERY_STATE);
     this.$store.commit(RESET_SELECT_STATE);
-
-    this.$watch('query', newQuery => { this.$store.commit(SET_QUERY_BODY, newQuery); });
   },
   mounted () {
     window.setTimeout(() => { this.editorMenu = true; }, 200);
@@ -105,11 +98,12 @@ export default {
   computed: {
     ...mapGetters([
       'queryId',
+      'queryBody',
       'selectResult',
       'selectError',
     ]),
     isRunnable () {
-      return Boolean(this.query);
+      return Boolean(this.queryBody);
     }
   },
   methods: {
@@ -117,7 +111,7 @@ export default {
       this.isLoading = true;
 
       try {
-        await this.$store.dispatch(EXECUTE_SELECT, this.query);
+        await this.$store.dispatch(EXECUTE_SELECT, this.queryBody);
       } catch(err) {
         console.log(err);
       } finally {

@@ -13,7 +13,7 @@
           <v-container fill-height class="pa-0">
             <v-layout column>
               <v-flex xs10>
-                <v-text-field v-model="title" v-bind:disabled="isLoading" label="Título" hide-details class="pb-4"></v-text-field>
+                <v-text-field v-bind:value="queryTitle" v-bind:disabled="isLoading" v-on:input="onTitleInput" label="Título" hide-details class="pb-4"></v-text-field>
               </v-flex>
               <v-flex xs2 class="pb-0">
                 <v-btn v-on:click="save" v-bind:disabled="!isSavable || isLoading" color="ma-0 blue white--text">
@@ -44,31 +44,25 @@ export default {
   components: {
     BaseNotepad
   },
-  data() {
+  data () {
     return {
-      title: null,
       isLoading: false
     };
-  },
-  created () {
-    this.title = this.queryTitle
-
-    this.$watch('title', newTitle => { this.$store.commit(SET_QUERY_TITLE, newTitle); });
   },
   computed: {
     ...mapGetters([
       'queryTitle',
       'queryBody',
     ]),
-    menuTitle() {
+    menuTitle () {
       return (this.edit) ? 'EDITAR QUERY' : 'SALVAR QUERY';
     },
-    isSavable() {
+    isSavable () {
       return Boolean(this.queryBody) && Boolean(this.queryTitle);
     }
   },
   methods: {
-    async save() {
+    async save () {
       this.isLoading = true;
       this.$emit('loading', true);
 
@@ -81,6 +75,9 @@ export default {
         this.isLoading = false;
         this.$emit('loading', false);
       }
+    },
+    onTitleInput (newTitle) {
+      this.$store.commit(SET_QUERY_TITLE, newTitle);
     }
   }
 }
