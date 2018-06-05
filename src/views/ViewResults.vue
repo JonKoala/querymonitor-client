@@ -4,7 +4,7 @@
       <v-toolbar color="blue-grey" dense card>
         <v-toolbar-title class="white--text">{{ this.queryTitle }}</v-toolbar-title>
       </v-toolbar>
-      <base-results-table v-model="selectResult" v-bind:isLoading="isLoading" v-bind:error="selectError" class="pa-0"></base-results-table>
+      <base-results-table v-bind:value="selectResult" v-bind:isLoading="isLoading" v-bind:error="selectError" class="pa-0"></base-results-table>
     </v-card>
   </v-container>
 </template>
@@ -12,7 +12,7 @@
 <script>
 import { mapGetters } from 'vuex'
 
-import { EXECUTE_SELECT, FETCH_QUERY } from 'store/actions.type'
+import { NAMESPACE, LOAD_RESULTS } from 'store/views/results.type'
 
 import BaseResultsTable from 'components/BaseResultsTable'
 
@@ -21,42 +21,23 @@ export default {
   components: {
     BaseResultsTable
   },
-  data () {
-    return {
-      isLoading: false
-    };
-  },
   created () {
-    this.loadQueryResults();
-  },
-  methods: {
-    async loadQueryResults () {
-      this.isLoading = true;
-
-      try {
-        await this.$store.dispatch(FETCH_QUERY, this.paramId);
-        await this.$store.dispatch(EXECUTE_SELECT, this.queryBody);
-      } catch(err) {
-        console.log(err);
-      } finally {
-        this.isLoading = false;
-      }
-    }
+    this.$store.dispatch(`${NAMESPACE}/${LOAD_RESULTS}`);
   },
   computed: {
     ...mapGetters([
-      'queryBody',
       'queryTitle',
       'selectResult',
       'selectError',
     ]),
-    paramId () {
-      return this.$route.params.id;
-    }
+    ...mapGetters(NAMESPACE, [
+      'paramId',
+      'isLoading'
+    ])
   },
   watch: {
     paramId: function() {
-      this.loadQueryResults();
+      this.$store.dispatch(`${NAMESPACE}/${LOAD_RESULTS}`);
     }
   }
 }
