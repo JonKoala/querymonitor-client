@@ -2,7 +2,7 @@
   <v-container fluid grid-list-md>
     <v-card>
       <v-toolbar color="blue-grey" dense card>
-        <v-toolbar-title class="white--text">{{ this.queryTitle }}</v-toolbar-title>
+        <v-toolbar-title class="white--text">{{ queryTitle }}</v-toolbar-title>
       </v-toolbar>
       <base-results-table v-bind:value="selectResult" v-bind:isLoading="isLoading" v-bind:error="selectError" class="pa-0"></base-results-table>
     </v-card>

@@ -37,7 +37,7 @@ const actions = {
       await dispatch(FETCH_QUERY, getters.paramId, { root: true });
       await dispatch(EXECUTE_SELECT, rootGetters.queryBody, { root: true });
     } catch(err) {
-      console.log(err);
+      throw err;
     } finally {
       commit(END_LOADING);
     }
