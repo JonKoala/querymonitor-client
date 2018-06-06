@@ -18,5 +18,9 @@ export default {
   async post(service, data) {
     service = formatUrl(service);
     return await Vue.axios.post(`${CONFIG.url.api}/${service}`, data);
+  },
+  async put(service, data) {
+    service = formatUrl(service);
+    return await Vue.axios.put(`${CONFIG.url.api}/${service}`, data);
   }
 };

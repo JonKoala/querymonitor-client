@@ -6,37 +6,37 @@
 
           <v-toolbar color="blue-grey" dense card>
 
-          <v-menu v-model="showingEditorMenu" transition="slide-y-transition" bottom offset-y
-          v-bind:close-on-content-click="false"
-          v-bind:nudge-width="400"
-          v-bind:nudge-bottom="10"
-          v-bind:nudge-right="10">
-            <v-tooltip top slot="activator">
-              <v-btn icon flat slot="activator">
-                <v-icon color="white">edit</v-icon>
+            <v-menu v-model="showingEditorMenu" transition="slide-y-transition" bottom offset-y
+            v-bind:close-on-content-click="false"
+            v-bind:nudge-width="400"
+            v-bind:nudge-bottom="10"
+            v-bind:nudge-right="10">
+              <v-tooltip top slot="activator">
+                <v-btn icon flat slot="activator">
+                  <v-icon color="white">edit</v-icon>
+                </v-btn>
+                <span>Query</span>
+              </v-tooltip>
+              <sandbox-query-editor class="pa-0" height="300px"></sandbox-query-editor>
+            </v-menu>
+
+            <v-tooltip top>
+              <v-btn slot="activator" v-on:click="executeQuery" v-bind:disabled="!this.isRunnable" icon class="ma-0">
+                <v-icon color="white">cached</v-icon>
               </v-btn>
-              <span>Query</span>
+              <span>Testar</span>
             </v-tooltip>
-            <sandbox-query-editor class="pa-0" height="300px"></sandbox-query-editor>
-          </v-menu>
 
-          <v-tooltip top>
-            <v-btn slot="activator" v-on:click="executeQuery" v-bind:disabled="!this.isRunnable" icon class="ma-0">
-              <v-icon color="white">cached</v-icon>
-            </v-btn>
-            <span>Testar</span>
-          </v-tooltip>
+            <v-toolbar-title class="white--text">SANDBOX</v-toolbar-title>
 
-          <v-toolbar-title class="white--text">SANDBOX</v-toolbar-title>
+            <v-spacer></v-spacer>
 
-          <v-spacer></v-spacer>
-
-          <v-tooltip top>
-            <v-btn slot="activator" v-on:click="showingSaveMenu = true" v-bind:disabled="!this.isRunnable" icon class="ma-0">
-              <v-icon color="white">save</v-icon>
-            </v-btn>
-            <span>Salvar</span>
-          </v-tooltip>
+            <v-tooltip top>
+              <v-btn slot="activator" v-on:click="showingSaveMenu = true" v-bind:disabled="!this.isRunnable" icon class="ma-0">
+                <v-icon color="white">save</v-icon>
+              </v-btn>
+              <span>Salvar</span>
+            </v-tooltip>
 
           </v-toolbar>
 
@@ -58,7 +58,7 @@
 <script>
 import { mapGetters } from 'vuex'
 
-import { NAMESPACE, EXECUTE_QUERY, SAVE_LOCAL_QUERY, START_SANDBOX } from 'store/views/sandbox.type'
+import { NAMESPACE, EXECUTE_QUERY, SAVE_LOCAL_QUERY, START_VIEW } from 'store/views/sandbox.type'
 
 import BaseResultsTable from 'components/BaseResultsTable'
 import SandboxQueryEditor from 'components/SandboxQueryEditor'
@@ -81,7 +81,7 @@ export default {
     };
   },
   created () {
-    this.$store.dispatch(`${NAMESPACE}/${START_SANDBOX}`);
+    this.$store.dispatch(`${NAMESPACE}/${START_VIEW}`);
   },
   mounted () {
     window.setTimeout(() => { this.showingEditorMenu = true; }, 200);
@@ -95,7 +95,8 @@ export default {
     ]),
     ...mapGetters(NAMESPACE, [
       'isExecutingQuery',
-      'isSaving'
+      'isSaving',
+      'viewMode'
     ]),
     isRunnable () {
       return Boolean(this.queryBody);
@@ -121,6 +122,12 @@ export default {
         this.showingSaveMenu = false;
         this.notifyUser('Ocorreu um erro ao tentar salvar a query...');
       }
+    }
+  },
+  watch: {
+    viewMode: function() {
+      this.$store.dispatch(`${NAMESPACE}/${START_VIEW}`);
+      window.setTimeout(() => { this.showingEditorMenu = true; }, 200);
     }
   }
 }

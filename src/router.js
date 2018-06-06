@@ -9,10 +9,11 @@ import ViewResults from 'views/ViewResults'
 Vue.use(VueRouter)
 
 export default new VueRouter({
-  routes: [
+  routes:
+  [
     {
-      name: 'sandbox',
-      path: '/sandbox',
+      name: 'edit',
+      path: '/edit/:id',
       component: ViewSandbox
     },
     {
@@ -24,6 +25,11 @@ export default new VueRouter({
       name: 'results',
       path: '/results/:id',
       component: ViewResults
+    },
+    {
+      name: 'sandbox',
+      path: '/sandbox',
+      component: ViewSandbox
     }
   ],
   mode: 'history'

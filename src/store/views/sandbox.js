@@ -1,8 +1,11 @@
 import Vue from 'vue'
 
-import { EXECUTE_QUERY, END_EXECUTING_QUERY, END_SAVING_QUERY, RESET_SANDBOX_STATE, SAVE_LOCAL_QUERY, START_EXECUTING_QUERY, START_SANDBOX, START_SAVING_QUERY } from './sandbox.type'
+import {
+  END_EXECUTING_QUERY, END_SAVING_QUERY, RESET_SANDBOX_STATE, START_EXECUTING_QUERY, START_SAVING_QUERY,
+  EXECUTE_QUERY, SAVE_LOCAL_QUERY, START_SANDBOX, START_AS_EDIT, START_AS_SANDBOX, START_VIEW
+} from './sandbox.type'
 import { RESET_QUERY_STATE, RESET_SELECT_STATE } from 'store/mutations.type'
-import { EXECUTE_SELECT, SAVE_QUERY } from 'store/actions.type'
+import { EXECUTE_SELECT, FETCH_QUERY, SAVE_QUERY } from 'store/actions.type'
 
 
 const initialState = {
@@ -18,7 +21,14 @@ const getters = {
   },
   isSaving (state) {
     return state.isSaving;
-  }
+  },
+  viewMode (state, allGetters, rootState) {
+    return rootState.route.name;
+  },
+
+  paramId(state, allGetters, rootState) {
+    return rootState.route.params.id
+  },
 
 }
 
@@ -46,11 +56,6 @@ const mutations = {
 
 const actions = {
 
-  [START_SANDBOX] ({ commit }) {
-    commit(RESET_SANDBOX_STATE);
-    commit(RESET_QUERY_STATE, null, { root: true });
-    commit(RESET_SELECT_STATE, null, { root: true });
-  },
   async [EXECUTE_QUERY] ({ commit, dispatch, rootGetters }) {
     commit(START_EXECUTING_QUERY);
 
@@ -71,6 +76,34 @@ const actions = {
       throw err;
     } finally {
       commit(END_SAVING_QUERY);
+    }
+  },
+  async [START_AS_EDIT] ({ commit, dispatch, getters, rootGetters }) {
+    commit(START_EXECUTING_QUERY);
+
+    try {
+      await dispatch(FETCH_QUERY, getters.paramId, { root: true });
+      await dispatch(EXECUTE_SELECT, rootGetters.queryBody, { root: true });
+    } catch(err) {
+      throw err;
+    } finally {
+      commit(END_EXECUTING_QUERY);
+    }
+  },
+  [START_AS_SANDBOX] ({ commit }) {
+    commit(RESET_QUERY_STATE, null, { root: true });
+    commit(RESET_SELECT_STATE, null, { root: true });
+  },
+  [START_VIEW] ({ commit, dispatch, getters }) {
+    commit(RESET_SANDBOX_STATE);
+
+    switch (getters.viewMode) {
+      case 'edit':
+        dispatch(START_AS_EDIT);
+        break;
+      case 'sandbox':
+        dispatch(START_AS_SANDBOX);
+        break;
     }
   }
 

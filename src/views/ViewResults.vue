@@ -3,6 +3,13 @@
     <v-card>
       <v-toolbar color="blue-grey" dense card>
         <v-toolbar-title class="white--text">{{ queryTitle }}</v-toolbar-title>
+        <v-spacer></v-spacer>
+        <v-tooltip top>
+          <v-btn @click="" v-bind:href="`/edit/${paramId}`" target="_blank" slot="activator" class="ma-0" icon>
+            <v-icon color="white">edit</v-icon>
+          </v-btn>
+          <span>Editar</span>
+        </v-tooltip>
       </v-toolbar>
       <base-results-table v-bind:value="selectResult" v-bind:isLoading="isLoading" v-bind:error="selectError" class="pa-0"></base-results-table>
     </v-card>
@@ -33,7 +40,10 @@ export default {
     ...mapGetters(NAMESPACE, [
       'paramId',
       'isLoading'
-    ])
+    ]),
+    linkToEdit () {
+      `edit/${this.paramId}`
+    }
   },
   watch: {
     paramId: function() {
