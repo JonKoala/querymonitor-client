@@ -19,7 +19,7 @@
 
       <base-results-table v-bind:value="selectResult" v-bind:isLoading="isLoading" v-bind:error="selectError" class="pa-0"></base-results-table>
 
-      <v-dialog v-bind:value="showingQueryViewer" max-width="400px">
+      <v-dialog v-model="showingQueryViewer" max-width="400px">
         <results-query-viewer></results-query-viewer>
       </v-dialog>
 
@@ -62,7 +62,6 @@ export default {
   },
   watch: {
     paramId: function() {
-      this.showingQueryViewer = false;
       this.$store.dispatch(`${NAMESPACE}/${LOAD_RESULTS}`);
     }
   }
