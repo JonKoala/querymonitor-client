@@ -1,26 +1,10 @@
 <template>
   <v-card>
-
     <v-toolbar color="blue-grey" dense card>
-
-      <v-tooltip top>
-        <v-btn v-on:click="copyQuery" slot="activator" class="ma-0 mr-5" icon>
-          <v-icon color="white">content_copy</v-icon>
-        </v-btn>
-        <span>Copiar</span>
-      </v-tooltip>
-
-      <v-tooltip top>
-        <v-btn @click="" v-bind:href="`/edit/${queryId}`" target="_blank" slot="activator" class="ma-0" icon>
-          <v-icon color="white">edit</v-icon>
-        </v-btn>
-        <span>Editar</span>
-      </v-tooltip>
-
+      <base-icon-button v-on:click="copyQuery" tooltip="Copiar" color="white" class="mr-5" top>content_copy</base-icon-button>
+      <base-icon-button v-bind:href="`/edit/${queryId}`" target="_blank" tooltip="Editar" color="white" top>edit</base-icon-button>
     </v-toolbar>
-
     <base-notepad v-bind:value="queryBody" readonly v-bind:style="{height: '200px'}"></base-notepad>
-
   </v-card>
 </template>
 
@@ -29,11 +13,13 @@ import { mapGetters } from 'vuex'
 
 import NotepadService from 'services/notepad.service'
 
+import BaseIconButton from 'components/BaseIconButton'
 import BaseNotepad from 'components/BaseNotepad'
 
 export default {
   name: 'ResultsQueryViewer',
   components: {
+    BaseIconButton,
     BaseNotepad
   },
   computed: {

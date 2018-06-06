@@ -1,12 +1,7 @@
 <template>
   <v-app id="app" light>
     <v-toolbar app fixed clipped-left>
-      <v-tooltip bottom>
-        <v-btn @click.stop="showMenu = !showMenu" slot="activator" class="mx-0" icon>
-          <v-icon>menu</v-icon>
-        </v-btn>
-        <span>Menu</span>
-      </v-tooltip>
+      <base-icon-button v-on:click="showMenu = !showMenu" tooltip="Menu" bottom>menu</base-icon-button>
       <v-toolbar-title>QUERY MONITOR</v-toolbar-title>
     </v-toolbar>
     <v-navigation-drawer v-model="showMenu" clipped fixed app absolute temporary class="pr-3">
@@ -26,11 +21,13 @@
 
 <script>
 import AppVerticalMenu from 'components/AppVerticalMenu'
+import BaseIconButton from 'components/BaseIconButton'
 
 export default {
   name: 'App',
   components: {
-    AppVerticalMenu
+    AppVerticalMenu,
+    BaseIconButton
   },
   data () {
     return {
