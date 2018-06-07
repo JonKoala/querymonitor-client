@@ -1,6 +1,6 @@
 <template>
   <v-card>
-    <v-toolbar color="blue-grey" dense card>
+    <v-toolbar color="blue" dense card>
       <v-toolbar-title class="white--text">SALVAR QUERY</v-toolbar-title>
     </v-toolbar>
     <v-progress-linear v-bind:active="isSaving" class="my-0" color="blue" indeterminate></v-progress-linear>
