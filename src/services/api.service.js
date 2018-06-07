@@ -10,6 +10,10 @@ function formatUrl(url) {
 }
 
 export default {
+  async delete(service, config) {
+    service = formatUrl(service);
+    return await Vue.axios.delete(`${CONFIG.url.api}/${service}`, config);
+  },
   async get(service, config) {
     service = formatUrl(service);
     var response = await Vue.axios.get(`${CONFIG.url.api}/${service}`, config);

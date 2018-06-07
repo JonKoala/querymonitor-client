@@ -1,14 +1,15 @@
 import Vue from 'vue'
 
 import {
-  END_EXECUTING_QUERY, END_SAVING_QUERY, RESET_SANDBOX_STATE, START_EXECUTING_QUERY, START_SAVING_QUERY,
-  EXECUTE_QUERY, SAVE_LOCAL_QUERY, START_SANDBOX, START_AS_EDIT, START_AS_SANDBOX, START_VIEW
+  END_DELETING_QUERY, END_EXECUTING_QUERY, END_SAVING_QUERY, RESET_SANDBOX_STATE, START_DELETING_QUERY, START_EXECUTING_QUERY, START_SAVING_QUERY,
+  DELETE_LOCAL_QUERY, EXECUTE_QUERY, SAVE_LOCAL_QUERY, START_SANDBOX, START_AS_EDIT, START_AS_SANDBOX, START_VIEW
 } from './sandbox.type'
 import { RESET_QUERY_STATE, RESET_SELECT_STATE } from 'store/mutations.type'
-import { EXECUTE_SELECT, FETCH_QUERY, SAVE_QUERY } from 'store/actions.type'
+import { DELETE_QUERY, EXECUTE_SELECT, FETCH_QUERY, SAVE_QUERY } from 'store/actions.type'
 
 
 const initialState = {
+  isDeletingQuery: false,
   isExecutingQuery: false,
   isSaving: false,
 }
@@ -16,6 +17,9 @@ const state = Object.assign({}, initialState)
 
 const getters = {
 
+  isDeletingQuery (state) {
+    return state.isDeletingQuery;
+  },
   isExecutingQuery (state) {
     return state.isExecutingQuery;
   },
@@ -28,20 +32,17 @@ const getters = {
 
   paramId(state, allGetters, rootState) {
     return rootState.route.params.id
-  },
+  }
 
 }
 
 const mutations = {
 
-  [START_EXECUTING_QUERY] (state) {
-    state.isExecutingQuery = true;
+  [END_DELETING_QUERY] (state) {
+    state.isDeletingQuery = false;
   },
   [END_EXECUTING_QUERY] (state) {
     state.isExecutingQuery = false;
-  },
-  [START_SAVING_QUERY] (state) {
-    state.isSaving = true;
   },
   [END_SAVING_QUERY] (state) {
     state.isSaving = false;
@@ -50,12 +51,32 @@ const mutations = {
     for (let f in state) {
       Vue.set(state, f, initialState[f]);
     }
+  },
+  [START_DELETING_QUERY] (state) {
+    state.isDeletingQuery = true;
+  },
+  [START_EXECUTING_QUERY] (state) {
+    state.isExecutingQuery = true;
+  },
+  [START_SAVING_QUERY] (state) {
+    state.isSaving = true;
   }
 
 }
 
 const actions = {
 
+  async [DELETE_LOCAL_QUERY] ({ commit, dispatch }) {
+    commit(START_DELETING_QUERY);
+
+    try {
+      await dispatch(DELETE_QUERY, null, { root: true });
+    } catch(err) {
+      throw err;
+    } finally {
+      commit(END_DELETING_QUERY);
+    }
+  },
   async [EXECUTE_QUERY] ({ commit, dispatch, rootGetters }) {
     commit(START_EXECUTING_QUERY);
 

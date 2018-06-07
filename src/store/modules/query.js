@@ -2,7 +2,7 @@ import Vue from 'vue'
 
 import ApiService from 'services/api.service'
 
-import { FETCH_QUERY, SAVE_QUERY } from 'store/actions.type'
+import { DELETE_QUERY, FETCH_QUERY, SAVE_QUERY } from 'store/actions.type'
 import { RESET_QUERY_STATE, SET_QUERY_BODY, SET_QUERY_ID, SET_QUERY_TITLE } from 'store/mutations.type'
 
 
@@ -48,6 +48,10 @@ const mutations = {
 
 const actions = {
 
+  async [DELETE_QUERY] ({ commit, getters }) {
+    await ApiService.delete(`queries/${getters.queryId}`);
+    commit(RESET_QUERY_STATE);
+  },
   async [FETCH_QUERY] ({ commit }, id) {
     commit(RESET_QUERY_STATE);
 
@@ -56,7 +60,7 @@ const actions = {
     commit(SET_QUERY_BODY, query.corpo);
     commit(SET_QUERY_TITLE, query.titulo);
   },
-  async [SAVE_QUERY] ({ getters, commit }) {
+  async [SAVE_QUERY] ({ commit, getters }) {
     var saved = null;
     if (getters.queryId)
       saved = await ApiService.put('queries', { id: getters.queryId, corpo: getters.queryBody, titulo: getters.queryTitle });
