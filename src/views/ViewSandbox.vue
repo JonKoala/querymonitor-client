@@ -10,10 +10,10 @@
             v-bind:nudge-bottom="10"
             v-bind:nudge-right="10">
               <base-icon-button slot="activator" tooltip="Query" color="white" top>edit</base-icon-button>
-              <sandbox-query-editor class="pa-0" height="300px"></sandbox-query-editor>
+              <sandbox-query-editor class="sandbox__editor-menu pa-0" height="300px"></sandbox-query-editor>
             </v-menu>
-            <base-icon-button v-on:click="executeQuery" tooltip="Testar" v-bind:disabled="!isRunnable" color="white" top>cached</base-icon-button>
-            <v-toolbar-title class="white--text">{{ toolbarTitle }}</v-toolbar-title>
+            <base-icon-button class="sandbox__execute-button" v-on:click="executeQuery" tooltip="Testar" v-bind:disabled="!isRunnable" color="white" top>cached</base-icon-button>
+            <v-toolbar-title class="sandbox__title white--text">{{ toolbarTitle }}</v-toolbar-title>
             <v-spacer></v-spacer>
             <base-icon-button v-on:click="showingDeleteMenu = true" v-if="isEditMode" tooltip="Deletar" color="white" class="mr-5" top>delete</base-icon-button>
             <base-icon-button v-on:click="showingSaveMenu = true" v-bind:disabled="!isRunnable" tooltip="Salvar" color="white" top>save</base-icon-button>
