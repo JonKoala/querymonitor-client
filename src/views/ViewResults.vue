@@ -2,11 +2,11 @@
   <v-container fluid grid-list-md>
     <v-card>
       <v-toolbar color="blue-grey" dense card>
-        <v-toolbar-title class="white--text">{{ queryTitle }}</v-toolbar-title>
+        <v-toolbar-title class="results__title white--text">{{ queryTitle }}</v-toolbar-title>
         <v-spacer></v-spacer>
-        <base-icon-button v-on:click="showingQueryViewer = true" tooltip="Query" color="white" top>code</base-icon-button>
+        <base-icon-button v-on:click="showingQueryViewer = true" tooltip="Query" class="results__query-viewer-button" color="white" top>code</base-icon-button>
       </v-toolbar>
-      <base-results-table v-bind:value="selectResult" v-bind:isLoading="isLoading" v-bind:error="selectError" class="pa-0"></base-results-table>
+      <base-results-table v-bind:value="selectResult" v-bind:isLoading="isLoading" v-bind:error="selectError" class="results__table pa-0"></base-results-table>
       <v-dialog v-model="showingQueryViewer" max-width="400px">
         <results-query-viewer></results-query-viewer>
       </v-dialog>

@@ -4,93 +4,81 @@ import sinon from 'sinon'
 import Vuetify from 'vuetify'
 import Vuex from 'vuex'
 
-import ApiService from 'services/api.service'
-import store from 'store'
+import { NAMESPACE, LOAD_RESULTS } from 'store/views/results.type'
 import ViewResults from 'views/ViewResults'
 
-import { module as routeStub  } from './utils/route.module.stub'
-import { SET_ROUTE_PATH, SET_ROUTE_PARAMS } from './utils/route.module.stub'
-import { waitWhile } from './utils/utils'
+import mockStore from './mocks/results.store'
 
 const localVue = createLocalVue();
 localVue.use(Vuetify);
 localVue.use(Vuex);
+
 
 // disable annoying dependency warnings and errors (errors are still detectable though)
 console.warn = function() {};
 console.error = function() {};
 
 
-function createWrapper() {
-
-  // stubbing the router
-  store.registerModule('route', routeStub);
-  store.commit(SET_ROUTE_PATH, '/results');
-  store.commit(SET_ROUTE_PARAMS, { id: 1 });
-
-  return mount(ViewResults, { localVue, store });;
-}
-
-
 describe('ViewResults.vue', function() {
 
-  var query, select, getStub;
-  beforeEach(function() {
-    query = { id: 1, titulo: 'title', corpo: 'corpo' };
-    select = [{ col1: 'col1', col2: 'col2' }];
-    getStub = sinon.stub(ApiService, 'get');
-    getStub.withArgs('queries/1').returns(query);
-    getStub.withArgs(`select/${query.corpo}`).returns(select);
-  });
-  afterEach(function() {
-    getStub.restore();
-  });
+  describe('Initialization', function() {
 
-  it('Should start by requesting for the query specified on the url and its results', async function() {
+    var store, loadResultsSpy;
+    beforeEach(function() {
+      loadResultsSpy = sinon.spy();
 
-    var wrapper = createWrapper();
-    await waitWhile(wrapper, () => wrapper.vm.isLoading);
-    expect(getStub.callCount).to.equal(2);
-    expect(wrapper.vm.paramId).to.equal(query.id);
-    expect(wrapper.vm.queryTitle).to.equal(query.titulo);
-    expect(wrapper.vm.selectResult).to.equal(select);
-  });
+      var mock = Object.assign({}, mockStore);
+      mock.modules[NAMESPACE].state.paramId = 1;
+      mock.modules[NAMESPACE].actions[LOAD_RESULTS] = loadResultsSpy;
 
-  it('Should request for the new specified query and its results when the url changes', async function() {
-    getStub.withArgs('queries/2').returns(query);
+      store = new Vuex.Store(mock);
+    });
 
-    var wrapper = createWrapper();
-    store.commit(SET_ROUTE_PARAMS, { id: 2 });
-    await waitWhile(wrapper, () => wrapper.vm.isLoading);
-    expect(getStub.callCount).to.equal(4);
-    expect(wrapper.vm.paramId).to.equal(2);
-    expect(wrapper.vm.queryTitle).to.equal(query.titulo);
-    expect(wrapper.vm.selectResult).to.equal(select);
+    it('Should start by calling the LOAD_RESULTS action', function() {
+
+      var wrapper = mount(ViewResults, { localVue, store });
+      expect(loadResultsSpy.calledOnce).to.be.true;
+    });
+
+    it('Should call LOAD_RESULTS whenever the url\'s id changes', function() {
+
+      var wrapper = mount(ViewResults, { localVue, store });
+      store.commit([NAMESPACE, 'changeParamId'].join('/'), 2);
+      expect(loadResultsSpy.calledTwice).to.be.true;
+      store.commit([NAMESPACE, 'changeParamId'].join('/'), 3);
+      expect(loadResultsSpy.calledThrice).to.be.true;
+    });
+
   });
 
-  it('Should render the query title', async function() {
+  describe('Interface', function() {
 
-    var wrapper = createWrapper();
-    await waitWhile(wrapper, () => wrapper.vm.isLoading);
-    expect(wrapper.find('.toolbar__title').text()).to.equal(query.titulo);
-  });
+    var store;
+    beforeEach(function() {
+      store = new Vuex.Store(mockStore);
+    });
 
-  it('Should render the query string on a dialog', async function() {
+    it('Should render the query title', function() {
+      store.commit('changeQueryTitle', 'title');
 
-    var wrapper = createWrapper();
-    await waitWhile(wrapper, () => wrapper.vm.isLoading);
-    expect(wrapper.find('textarea').element.value).to.equal(query.corpo);
-  });
+      var wrapper = mount(ViewResults, { localVue, store });
+      expect(wrapper.find('.results__title').text()).to.equal('title');
+    });
 
-  it('Should display the query string dialog only when the \'query\' button is clicked', async function() {
+    it('Should start with the query-viewer hidden', function() {
 
-    var wrapper = createWrapper();
-    await waitWhile(wrapper, () => wrapper.vm.isLoading);
-    expect(wrapper.find('.dialog').element.style.display).to.equal('none');
+      var wrapper = mount(ViewResults, { localVue, store });
+      expect(wrapper.find('.dialog').element.style.display).to.equal('none');
+    });
 
-    wrapper.find('button').trigger('click');
-    await wrapper.vm.$nextTick();
-    expect(wrapper.find('.dialog').element.style.display).to.not.equal('none');
+    it('Should show the query-viewer on clicking its activation button', async function() {
+
+      var wrapper = mount(ViewResults, { localVue, store });
+      wrapper.find('.results__query-viewer-button button').trigger('click');
+      await wrapper.vm.$nextTick();
+      expect(wrapper.find('.dialog').element.style.display).to.not.equal('none');
+    });
+
   });
 
 });
