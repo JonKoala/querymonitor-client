@@ -27,13 +27,14 @@ const namespacedModule = {
     paramId: (state) => state.paramId,
     isLoading: (state) => state.isLoading
   },
+  mutations: {
+    changeParamId: (state, newValue) => { state.paramId = newValue },
+    changeIsLoading: (state, newValue) => { state.isLoading = newValue }
+  },
   actions: {
     [LOAD_RESULTS]: () => {}
   },
-  mutations: {
-    changeParamId: (state, newId) => { state.paramId = newId; }
-  },
-  namespaced: true,
+  namespaced: true
 }
 
 export default {
