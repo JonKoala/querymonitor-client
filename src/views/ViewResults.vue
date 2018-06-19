@@ -8,7 +8,7 @@
       </v-toolbar>
       <base-results-table v-bind:value="selectResult" v-bind:isLoading="isLoading" v-bind:error="selectError" class="results__table pa-0"></base-results-table>
       <v-dialog v-model="showingQueryViewer" max-width="400px">
-        <results-query-viewer></results-query-viewer>
+        <results-query-viewer class="results__query-viewer"></results-query-viewer>
       </v-dialog>
     </v-card>
   </v-container>

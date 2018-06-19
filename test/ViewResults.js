@@ -76,7 +76,7 @@ describe('ViewResults.vue', function() {
       var wrapper = mount(ViewResults, { localVue, store });
       wrapper.find('.results__query-viewer-button button').trigger('click');
       await wrapper.vm.$nextTick();
-      expect(wrapper.find('.dialog').element.style.display).to.not.equal('none');
+      expect(wrapper.find('.results__query-viewer').element.parentElement.style.display).to.not.equal('none');
     });
 
   });
