@@ -12,17 +12,17 @@
               <base-icon-button slot="activator" tooltip="Query" color="white" top>edit</base-icon-button>
               <sandbox-query-editor class="sandbox__editor-menu pa-0" height="300px"></sandbox-query-editor>
             </v-menu>
-            <base-icon-button class="sandbox__execute-button" v-on:click="executeQuery" tooltip="Testar" v-bind:disabled="!isRunnable" color="white" top>cached</base-icon-button>
+            <base-icon-button v-on:click="executeQuery" v-bind:disabled="!isRunnable" tooltip="Testar" class="sandbox__execute-button" color="white" top>cached</base-icon-button>
             <v-toolbar-title class="sandbox__title white--text">{{ toolbarTitle }}</v-toolbar-title>
             <v-spacer></v-spacer>
             <base-icon-button v-on:click="showingDeleteMenu = true" v-if="isEditMode" tooltip="Deletar" color="white" class="mr-5" top>delete</base-icon-button>
-            <base-icon-button v-on:click="showingSaveMenu = true" v-bind:disabled="!isRunnable" tooltip="Salvar" color="white" top>save</base-icon-button>
+            <base-icon-button v-on:click="showingSaveMenu = true" v-bind:disabled="!isRunnable" tooltip="Salvar" class="sandbox__save-menu-button" color="white" top>save</base-icon-button>
           </v-toolbar>
           <base-results-table v-model="selectResult"  v-bind:error="selectError" v-bind:isLoading="isExecutingQuery" class="pa-0"></base-results-table>
         </v-card>
       </v-flex>
       <v-dialog v-model="showingSaveMenu" v-bind:persistent="isSaving" max-width="600px">
-        <sandbox-save-menu v-on:save="saveQuery"></sandbox-save-menu>
+        <sandbox-save-menu class="sandbox__save-menu" v-on:save="saveQuery"></sandbox-save-menu>
       </v-dialog>
       <v-dialog v-model="showingDeleteMenu" v-if="isEditMode" v-bind:persistent="isDeletingQuery" max-width="350px">
         <sandbox-delete-menu v-on:delete="deleteQuery"></sandbox-delete-menu>
