@@ -16,7 +16,7 @@
                 <v-text-field v-bind:value="queryTitle" v-bind:disabled="isSaving" v-on:input="onTitleInput" label="Título" hide-details class="pb-4"></v-text-field>
               </v-flex>
               <v-flex xs2 class="pb-0">
-                <v-btn v-on:click="onSaveClick" v-bind:disabled="!isSavable" color="ma-0 blue white--text">
+                <v-btn v-on:click="onSaveClick" v-bind:disabled="!isSavable" class="sandbox-save-menu__save-button" color="ma-0 blue white--text">
                   <v-icon left color="white">save</v-icon>salvar
                 </v-btn>
               </v-flex>
