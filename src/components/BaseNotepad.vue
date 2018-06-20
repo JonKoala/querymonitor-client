@@ -1,5 +1,5 @@
 <template>
-  <v-text-field v-bind="{value, readonly}" v-on:input="onInput" multi-line hide-details no-resize class="editor pa-2 blue-grey lighten-5"></v-text-field>
+  <v-text-field v-bind="{value, readonly}" v-on="$listeners" multi-line hide-details no-resize class="editor pa-2 blue-grey lighten-5"></v-text-field>
 </template>
 
 <script>
@@ -8,11 +8,6 @@ export default {
   props: {
     value: { type: String },
     readonly: { type: Boolean }
-  },
-  methods: {
-    onInput (newText) {
-      this.$emit('input', newText);
-    }
   }
 }
 </script>
