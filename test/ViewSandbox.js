@@ -215,3 +215,95 @@ describe('ViewSandbox.vue (sandbox mode)', function() {
   });
 
 });
+
+describe('ViewSandbox.vue (edit mode)', function() {
+
+  var localVue, mockStore;
+  beforeEach(function() {
+    localVue = createLocalVue();
+    localVue.use(Vuetify);
+    localVue.use(Vuex);
+
+    mockStore = Object.assign({}, mockStoreModel);
+    mockStore.modules[NAMESPACE].state.viewMode = 'edit';
+    mockStore.state.queryId = 1
+  });
+
+  describe('Interface', function() {
+
+    var store;
+    beforeEach(function() {
+      store = new Vuex.Store(mockStore);
+    });
+
+    it('Should render the query name as the toolbar title', function() {
+      store.commit('changeQueryTitle', 'title');
+
+      var wrapper = mount(ViewSandbox, { localVue, store });
+      expect(wrapper.find('.sandbox__title').text()).to.equal('title');
+    });
+
+    it('Should render the delete-menu-button', function() {
+
+      var wrapper = mount(ViewSandbox, { localVue, store });
+      expect(wrapper.find('.sandbox__delete-menu-button').exists()).to.be.true;
+    });
+
+    it('Should render the delete-menu', function() {
+
+      var wrapper = mount(ViewSandbox, { localVue, store });
+      expect(wrapper.find('.sandbox__delete-menu').exists()).to.be.true;
+    });
+
+    it('Should show the delete-menu on clicking its activation button', async function() {
+
+      var wrapper = mount(ViewSandbox, { localVue, store });
+      wrapper.find('.sandbox__delete-menu-button button').trigger('click');
+      await wrapper.vm.$nextTick();
+      expect(wrapper.find('.sandbox__delete-menu').element.parentElement.style.display).to.not.equal('none');
+    });
+
+  });
+
+  describe('Events', function() {
+
+    var store, deleteLocalQuery;
+    beforeEach(function() {
+      deleteLocalQuery = sinon.stub();
+
+      mockStore.modules[NAMESPACE].actions[DELETE_LOCAL_QUERY] = deleteLocalQuery;
+
+      store = new Vuex.Store(mockStore);
+    });
+
+    it('Should call the DELETE_LOCAL_QUERY action on \'delete\' event', function() {
+
+      var wrapper = mount(ViewSandbox, { localVue, store });
+      wrapper.find('.sandbox__delete-menu .sandbox-delete-menu__delete-button').trigger('click');
+      expect(deleteLocalQuery.calledOnce).to.be.true;
+    });
+
+    it('Should redirect the user after the \'delete\' event', async function() {
+      localVue.use(VueRouter);
+      var router = new VueRouter();
+
+      var wrapper = mount(ViewSandbox, { localVue, store, router });
+      var pushStub = sinon.stub(wrapper.vm.$router, 'push');
+
+      wrapper.find('.sandbox__delete-menu .sandbox-delete-menu__delete-button').trigger('click');
+      await wrapper.vm.$nextTick();
+      expect(pushStub.calledOnce).to.be.true;
+    });
+
+    it('Should show a notification when the \'delete\' event fails', async function() {
+      deleteLocalQuery.throws();
+
+      var wrapper = mount(ViewSandbox, { localVue, store });
+      wrapper.find('.sandbox__delete-menu .sandbox-delete-menu__delete-button').trigger('click');
+      await wrapper.vm.$nextTick();
+      expect(wrapper.find('.sandbox__notification').exists()).to.be.true;
+    });
+
+  });
+
+});
