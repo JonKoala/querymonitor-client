@@ -8,7 +8,7 @@ import Vuex from 'vuex'
 import { NAMESPACE, DELETE_LOCAL_QUERY, EXECUTE_QUERY, SAVE_LOCAL_QUERY, START_VIEW } from 'store/views/sandbox.type'
 import ViewSandbox from 'views/ViewSandbox'
 
-import mockStoreModel from './mocks/sandbox.store'
+import mockStore from './mocks/store'
 
 
 // disable annoying dependency warnings and errors (errors are still detectable though)
@@ -18,13 +18,13 @@ console.error = function() {};
 
 describe('ViewSandbox.vue', function() {
 
-  var localVue, mockStore;
+  var localVue, storeModel;
   beforeEach(function() {
     localVue = createLocalVue();
     localVue.use(Vuetify);
     localVue.use(Vuex);
 
-    mockStore = Object.assign({}, mockStoreModel);
+    storeModel = Object.assign({}, mockStore);
   });
 
   describe('Initialization', function() {
@@ -33,9 +33,9 @@ describe('ViewSandbox.vue', function() {
     beforeEach(function() {
       startViewSpy = sinon.spy();
 
-      mockStore.modules[NAMESPACE].actions[START_VIEW] = startViewSpy;
+      storeModel.modules[NAMESPACE].actions[START_VIEW] = startViewSpy;
 
-      store = new Vuex.Store(mockStore);
+      store = new Vuex.Store(storeModel);
     });
 
     it('Should start by calling the START_VIEW action', function() {
@@ -50,7 +50,7 @@ describe('ViewSandbox.vue', function() {
 
     var store;
     beforeEach(function() {
-      store = new Vuex.Store(mockStore);
+      store = new Vuex.Store(storeModel);
     });
 
     it('Should show the editor-menu shortly after creation', async function() {
@@ -113,10 +113,10 @@ describe('ViewSandbox.vue', function() {
       executeQueryStub = sinon.stub();
       saveLocalQueryStub = sinon.stub();
 
-      mockStore.modules[NAMESPACE].actions[EXECUTE_QUERY] = executeQueryStub;
-      mockStore.modules[NAMESPACE].actions[SAVE_LOCAL_QUERY] = saveLocalQueryStub;
+      storeModel.modules[NAMESPACE].actions[EXECUTE_QUERY] = executeQueryStub;
+      storeModel.modules[NAMESPACE].actions[SAVE_LOCAL_QUERY] = saveLocalQueryStub;
 
-      store = new Vuex.Store(mockStore);
+      store = new Vuex.Store(storeModel);
     });
 
     it('Should call the EXECUTE_QUERY action on \'execute\' event', function() {
@@ -177,21 +177,21 @@ describe('ViewSandbox.vue', function() {
 
 describe('ViewSandbox.vue (sandbox mode)', function() {
 
-  var localVue, mockStore;
+  var localVue, storeModel;
   beforeEach(function() {
     localVue = createLocalVue();
     localVue.use(Vuetify);
     localVue.use(Vuex);
 
-    mockStore = Object.assign({}, mockStoreModel);
-    mockStore.modules[NAMESPACE].state.viewMode = 'sandbox';
+    storeModel = Object.assign({}, mockStore);
+    storeModel.modules[NAMESPACE].state.viewMode = 'sandbox';
   });
 
   describe('Interface', function() {
 
     var store;
     beforeEach(function() {
-      store = new Vuex.Store(mockStore);
+      store = new Vuex.Store(storeModel);
     });
 
     it('Should render \'SANDBOX\' as the toolbar title', function() {
@@ -218,22 +218,22 @@ describe('ViewSandbox.vue (sandbox mode)', function() {
 
 describe('ViewSandbox.vue (edit mode)', function() {
 
-  var localVue, mockStore;
+  var localVue, storeModel;
   beforeEach(function() {
     localVue = createLocalVue();
     localVue.use(Vuetify);
     localVue.use(Vuex);
 
-    mockStore = Object.assign({}, mockStoreModel);
-    mockStore.modules[NAMESPACE].state.viewMode = 'edit';
-    mockStore.state.queryId = 1
+    storeModel = Object.assign({}, mockStore);
+    storeModel.modules[NAMESPACE].state.viewMode = 'edit';
+    storeModel.state.queryId = 1
   });
 
   describe('Interface', function() {
 
     var store;
     beforeEach(function() {
-      store = new Vuex.Store(mockStore);
+      store = new Vuex.Store(storeModel);
     });
 
     it('Should render the query name as the toolbar title', function() {
@@ -271,9 +271,9 @@ describe('ViewSandbox.vue (edit mode)', function() {
     beforeEach(function() {
       deleteLocalQuery = sinon.stub();
 
-      mockStore.modules[NAMESPACE].actions[DELETE_LOCAL_QUERY] = deleteLocalQuery;
+      storeModel.modules[NAMESPACE].actions[DELETE_LOCAL_QUERY] = deleteLocalQuery;
 
-      store = new Vuex.Store(mockStore);
+      store = new Vuex.Store(storeModel);
     });
 
     it('Should call the DELETE_LOCAL_QUERY action on \'delete\' event', function() {

@@ -7,11 +7,7 @@ import Vuex from 'vuex'
 import { NAMESPACE, LOAD_RESULTS } from 'store/views/results.type'
 import ViewResults from 'views/ViewResults'
 
-import mockStore from './mocks/results.store'
-
-const localVue = createLocalVue();
-localVue.use(Vuetify);
-localVue.use(Vuex);
+import mockStore from './mocks/store'
 
 
 // disable annoying dependency warnings and errors (errors are still detectable though)
@@ -21,17 +17,25 @@ console.error = function() {};
 
 describe('ViewResults.vue', function() {
 
+  var localVue, storeModel;
+  beforeEach(function() {
+    localVue = createLocalVue();
+    localVue.use(Vuetify);
+    localVue.use(Vuex);
+
+    storeModel = Object.assign({}, mockStore);
+  });
+
   describe('Initialization', function() {
 
     var store, loadResultsSpy;
     beforeEach(function() {
       loadResultsSpy = sinon.spy();
 
-      var mock = Object.assign({}, mockStore);
-      mock.modules[NAMESPACE].state.paramId = 1;
-      mock.modules[NAMESPACE].actions[LOAD_RESULTS] = loadResultsSpy;
+      storeModel.modules[NAMESPACE].state.paramId = 1;
+      storeModel.modules[NAMESPACE].actions[LOAD_RESULTS] = loadResultsSpy;
 
-      store = new Vuex.Store(mock);
+      store = new Vuex.Store(storeModel);
     });
 
     it('Should start by calling the LOAD_RESULTS action', function() {
@@ -55,7 +59,7 @@ describe('ViewResults.vue', function() {
 
     var store;
     beforeEach(function() {
-      store = new Vuex.Store(mockStore);
+      store = new Vuex.Store(storeModel);
     });
 
     it('Should render the query title', function() {
