@@ -1,7 +1,7 @@
 <template>
   <v-container fluid>
-    <v-progress-linear v-show="showLoadingBar" class="my-0" color="blue" indeterminate></v-progress-linear>
-    <v-data-table class="table-container"
+    <v-progress-linear v-show="showLoadingBar" class="results-table__progress my-0" color="blue" indeterminate></v-progress-linear>
+    <v-data-table class="results-table__data-table"
       v-show="showTable"
       v-bind:items="items"
       v-bind:headers="headers"
@@ -10,8 +10,8 @@
         <td v-for="prop in Object.keys(props.item)" >{{ props.item[prop] }}</td>
       </template>
     </v-data-table>
-    <v-alert class="my-0" v-bind:value="showEmptyDataAlert" color="warning" icon="priority_high">Nenhum dado encontrado</v-alert>
-    <v-alert class="my-0" v-bind:value="showErrorAlert" color="error" icon="warning">{{ error }}</v-alert>
+    <v-alert v-bind:value="showEmptyDataAlert" class="results-table__alert-empty my-0" color="warning" icon="priority_high">Nenhum dado encontrado</v-alert>
+    <v-alert v-bind:value="showErrorAlert" class="results-table__alert-error my-0" color="error" icon="warning">{{ error }}</v-alert>
   </v-container>
 </template>
 
@@ -38,7 +38,7 @@ export default {
       return this.isLoading;
     },
     showErrorAlert () {
-      return this.error;
+      return Boolean(this.error);
     },
     showEmptyDataAlert () {
       return !this.error && this.isEmpty;

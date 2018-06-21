@@ -3,7 +3,7 @@
     <v-toolbar color="red" dense card>
       <v-toolbar-title class="white--text">DELETAR QUERY</v-toolbar-title>
     </v-toolbar>
-    <v-progress-linear v-bind:active="isDeletingQuery" class="my-0" color="blue" indeterminate></v-progress-linear>
+    <v-progress-linear v-bind:active="isDeletingQuery" class="sandbox-delete-menu__progress my-0" color="blue" indeterminate></v-progress-linear>
     <v-card-text>Tem certeza de que deseja deletar a query atual?</v-card-text>
     <v-card-actions class="px-3 pb-3">
       <v-btn v-on:click="onDeleteClick" class="sandbox-delete-menu__delete-button" color="ma-0 red white--text">
