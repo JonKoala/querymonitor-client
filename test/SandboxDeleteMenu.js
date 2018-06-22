@@ -25,6 +25,10 @@ describe('SandboxDeleteMenu.vue', function() {
     store = new Vuex.Store(mockStore);
   });
 
+  afterEach(function() {
+    store.dispatch('resetStore');
+  });
+
   it('Should display a loading bar when the query is being deleted', function() {
     store.commit([NAMESPACE, 'changeIsDeletingQuery'].join('/'), true);
 

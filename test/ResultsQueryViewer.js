@@ -27,11 +27,13 @@ describe('ResultsQueryViewer.vue', function() {
     localVue.use(Vuetify);
     localVue.use(Vuex);
 
-    var storeModel = Object.assign({}, mockStore);
-    storeModel.state.queryId = 1;
-    storeModel.state.queryBody = 'query';
+    store = new Vuex.Store(mockStore);
+    store.commit('changeQueryId', 1);
+    store.commit('changeQueryBody', 'query');
+  });
 
-    store = new Vuex.Store(storeModel);
+  afterEach(function() {
+    store.dispatch('resetStore');
   });
 
   it('Should render the query body', function() {

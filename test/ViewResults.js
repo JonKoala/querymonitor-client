@@ -31,11 +31,14 @@ describe('ViewResults.vue', function() {
     var store, loadResultsSpy;
     beforeEach(function() {
       loadResultsSpy = sinon.spy();
-
-      storeModel.modules[NAMESPACE].state.paramId = 1;
       storeModel.modules[NAMESPACE].actions[LOAD_RESULTS] = loadResultsSpy;
 
       store = new Vuex.Store(storeModel);
+      store.commit([NAMESPACE, 'changeParamId'].join('/'), 1);
+    });
+
+    afterEach(function() {
+      store.dispatch('resetStore');
     });
 
     it('Should start by calling the LOAD_RESULTS action', function() {
@@ -60,6 +63,10 @@ describe('ViewResults.vue', function() {
     var store;
     beforeEach(function() {
       store = new Vuex.Store(storeModel);
+    });
+
+    afterEach(function() {
+      store.dispatch('resetStore');
     });
 
     it('Should render the query title', function() {

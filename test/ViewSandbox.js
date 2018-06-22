@@ -32,10 +32,13 @@ describe('ViewSandbox.vue', function() {
     var store, startViewSpy;
     beforeEach(function() {
       startViewSpy = sinon.spy();
-
       storeModel.modules[NAMESPACE].actions[START_VIEW] = startViewSpy;
 
       store = new Vuex.Store(storeModel);
+    });
+
+    afterEach(function() {
+      store.dispatch('resetStore');
     });
 
     it('Should start by calling the START_VIEW action', function() {
@@ -51,6 +54,10 @@ describe('ViewSandbox.vue', function() {
     var store;
     beforeEach(function() {
       store = new Vuex.Store(storeModel);
+    });
+
+    afterEach(function() {
+      store.dispatch('resetStore');
     });
 
     it('Should show the editor-menu shortly after creation', async function() {
@@ -112,11 +119,14 @@ describe('ViewSandbox.vue', function() {
     beforeEach(function() {
       executeQueryStub = sinon.stub();
       saveLocalQueryStub = sinon.stub();
-
       storeModel.modules[NAMESPACE].actions[EXECUTE_QUERY] = executeQueryStub;
       storeModel.modules[NAMESPACE].actions[SAVE_LOCAL_QUERY] = saveLocalQueryStub;
 
       store = new Vuex.Store(storeModel);
+    });
+
+    afterEach(function() {
+      store.dispatch('resetStore');
     });
 
     it('Should call the EXECUTE_QUERY action on \'execute\' event', function() {
@@ -194,6 +204,10 @@ describe('ViewSandbox.vue (sandbox mode)', function() {
       store = new Vuex.Store(storeModel);
     });
 
+    afterEach(function() {
+      store.dispatch('resetStore');
+    });
+
     it('Should render \'SANDBOX\' as the toolbar title', function() {
 
       var wrapper = mount(ViewSandbox, { localVue, store });
@@ -236,6 +250,10 @@ describe('ViewSandbox.vue (edit mode)', function() {
       store = new Vuex.Store(storeModel);
     });
 
+    afterEach(function() {
+      store.dispatch('resetStore');
+    });
+
     it('Should render the query name as the toolbar title', function() {
       store.commit('changeQueryTitle', 'title');
 
@@ -270,10 +288,13 @@ describe('ViewSandbox.vue (edit mode)', function() {
     var store, deleteLocalQuery;
     beforeEach(function() {
       deleteLocalQuery = sinon.stub();
-
       storeModel.modules[NAMESPACE].actions[DELETE_LOCAL_QUERY] = deleteLocalQuery;
 
       store = new Vuex.Store(storeModel);
+    });
+
+    afterEach(function() {
+      store.dispatch('resetStore');
     });
 
     it('Should call the DELETE_LOCAL_QUERY action on \'delete\' event', function() {

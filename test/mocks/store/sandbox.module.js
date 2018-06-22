@@ -1,13 +1,16 @@
+import Vue from 'vue'
+
 import { DELETE_LOCAL_QUERY, EXECUTE_QUERY, SAVE_LOCAL_QUERY, START_VIEW } from 'store/views/sandbox.type'
 
 
-const state = {
+const initialState = {
   isDeletingQuery: false,
   isExecutingQuery: false,
   isSaving: false,
   viewMode: null,
   paramId: null
 }
+const state = Object.assign({}, initialState)
 
 const getters = {
   isDeletingQuery: (state) => state.isDeletingQuery,
@@ -22,7 +25,12 @@ const mutations = {
   changeIsExecutingQuery: (state, newValue) => { state.isExecutingQuery = newValue },
   changeIsSaving: (state, newValue) => { state.isSaving = newValue },
   changeViewMode: (state, newValue) => { state.viewMode = newValue },
-  changeParamId: (state, newValue) => { state.paramId = newValue }
+  changeParamId: (state, newValue) => { state.paramId = newValue },
+  resetState: (state) => {
+    for (let f in state) {
+      Vue.set(state, f, initialState[f]);
+    }
+  }
 }
 
 const actions = {

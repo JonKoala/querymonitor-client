@@ -1,3 +1,4 @@
+import actions from './actions'
 import getters from './getters'
 import mutations from './mutations'
 import state from './state'
@@ -9,6 +10,7 @@ import { NAMESPACE as sandboxModuleNamespace } from 'store/views/sandbox.type'
 
 
 export default {
+  actions,
   getters,
   mutations,
   state,
