@@ -36,6 +36,13 @@ describe('SandboxDeleteMenu.vue', function() {
     expect(wrapper.find('.sandbox-delete-menu__progress div').element.style.height).to.not.equal('0px');
   });
 
+  it('Should disable the delete-button when the query is being deleted', function() {
+    store.commit([NAMESPACE, 'changeIsDeletingQuery'].join('/'), true);
+
+    var wrapper = mount(SandboxDeleteMenu, { localVue, store });
+    expect(wrapper.find('.sandbox-delete-menu__delete-button').element.disabled).to.be.true;
+  });
+
   it('Should emit the \'delete\' event when the delete-button is clicked', function() {
 
     var wrapper = mount(SandboxDeleteMenu, { localVue, store });

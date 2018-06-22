@@ -10,8 +10,8 @@ export default {
   changeSelectResult: (state, newValue) => { state.selectResult = newValue },
   changeSelectError: (state, newValue) => { state.selectError = newValue },
   resetState: (state) => {
-    for (let f in state) {
-      Vue.set(state, f, initialState[f]);
-    }
+    Object.keys(initialState).forEach(key => {
+      Vue.set(state, key, initialState[key])
+    });
   }
 }

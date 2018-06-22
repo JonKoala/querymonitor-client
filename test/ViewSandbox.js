@@ -130,52 +130,51 @@ describe('ViewSandbox.vue', function() {
     });
 
     it('Should call the EXECUTE_QUERY action on \'execute\' event', function() {
+      store.commit('changeQueryBody', 'query');
 
       var wrapper = mount(ViewSandbox, { localVue, store });
-      store.commit('changeQueryBody', 'query');
       wrapper.find('.sandbox__execute-button button').trigger('click');
       expect(executeQueryStub.calledOnce).to.be.true;
     });
 
     it('Should show a notification when the \'execute\' event fails', async function() {
+      store.commit('changeQueryBody', 'query');
       executeQueryStub.throws();
 
       var wrapper = mount(ViewSandbox, { localVue, store });
-      store.commit('changeQueryBody', 'query');
       wrapper.find('.sandbox__execute-button button').trigger('click');
       await wrapper.vm.$nextTick();
       expect(wrapper.find('.sandbox__notification').exists()).to.be.true;
     });
 
     it('Should call the SAVE_LOCAL_QUERY action on \'save\' event', function() {
+      store.commit('changeQueryBody', 'query');
+      store.commit('changeQueryTitle', 'title');
 
       var wrapper = mount(ViewSandbox, { localVue, store });
-      store.commit('changeQueryBody', 'query');
-      store.commit('changeQueryTitle', 'query');
       wrapper.find('.sandbox__save-menu .sandbox-save-menu__save-button').trigger('click');
       expect(saveLocalQueryStub.calledOnce).to.be.true;
     });
 
     it('Should redirect the user after the \'save\' event', async function() {
+      store.commit('changeQueryBody', 'query');
+      store.commit('changeQueryTitle', 'query');
       localVue.use(VueRouter);
       var router = new VueRouter();
 
       var wrapper = mount(ViewSandbox, { localVue, store, router });
       var pushStub = sinon.stub(wrapper.vm.$router, 'push');
-
-      store.commit('changeQueryBody', 'query');
-      store.commit('changeQueryTitle', 'query');
       wrapper.find('.sandbox__save-menu .sandbox-save-menu__save-button').trigger('click');
       await wrapper.vm.$nextTick();
       expect(pushStub.calledOnce).to.be.true;
     });
 
     it('Should show a notification when the \'save\' event fails', async function() {
+      store.commit('changeQueryBody', 'query');
+      store.commit('changeQueryTitle', 'query');
       saveLocalQueryStub.throws();
 
       var wrapper = mount(ViewSandbox, { localVue, store });
-      store.commit('changeQueryBody', 'query');
-      store.commit('changeQueryTitle', 'query');
       wrapper.find('.sandbox__save-menu .sandbox-save-menu__save-button').trigger('click');
       await wrapper.vm.$nextTick();
       expect(wrapper.find('.sandbox__notification').exists()).to.be.true;

@@ -24,14 +24,10 @@ const mutations = {
   }
 }
 
-const actions = {
-  [LOAD_RESULTS]: () => {}
-}
-
 export default {
   state,
   getters,
   mutations,
-  actions,
+  actions: {},
   namespaced: true
 }

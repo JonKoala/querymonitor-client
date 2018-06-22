@@ -6,8 +6,8 @@ import sinon from 'sinon'
 import Vuetify from 'vuetify'
 import Vuex from 'vuex'
 
-import ResultsQueryViewer from 'components/ResultsQueryViewer'
 import NotepadService from 'services/notepad.service'
+import ResultsQueryViewer from 'components/ResultsQueryViewer'
 
 import mockStore from './mocks/store'
 

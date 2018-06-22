@@ -33,17 +33,10 @@ const mutations = {
   }
 }
 
-const actions = {
-  [DELETE_LOCAL_QUERY]: () => {},
-  [EXECUTE_QUERY]: () => {},
-  [SAVE_LOCAL_QUERY]: () => {},
-  [START_VIEW]: () => {}
-}
-
 export default {
   state,
   getters,
   mutations,
-  actions,
+  actions: {},
   namespaced: true
 }

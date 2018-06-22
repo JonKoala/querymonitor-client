@@ -3,32 +3,32 @@
     <v-toolbar dense dark card color="brown darken-1">
       <v-toolbar-items>
         <v-tooltip top>
-          <v-btn v-on:click="indentQuery" flat slot="activator">
+          <v-btn v-on:click="indentQuery" flat slot="activator" class="sandbox-query-editor__indent-button">
             <v-icon>format_align_left</v-icon>
           </v-btn>
           <span>Indentar</span>
         </v-tooltip>
         <v-tooltip top>
-          <v-btn v-on:click="inlineQuery" flat slot="activator">
+          <v-btn v-on:click="inlineQuery" flat slot="activator" class="sandbox-query-editor__inline-button">
             <v-icon>vertical_align_center</v-icon>
           </v-btn>
           <span>Comprimir</span>
         </v-tooltip>
         <v-tooltip top class="ml-5">
-          <v-btn v-on:click="copyQuery" flat slot="activator">
+          <v-btn v-on:click="copyQuery" flat slot="activator" class="sandbox-query-editor__copy-button">
             <v-icon>content_copy</v-icon>
           </v-btn>
           <span>Copiar</span>
         </v-tooltip>
         <v-tooltip top>
-          <v-btn v-on:click="clearQuery" flat slot="activator">
+          <v-btn v-on:click="clearQuery" flat slot="activator" class="sandbox-query-editor__clear-button">
             <v-icon>delete</v-icon>
           </v-btn>
           <span>Limpar</span>
         </v-tooltip>
       </v-toolbar-items>
     </v-toolbar>
-    <base-notepad v-bind:value="queryBody" v-on:input="onInput" class="editor" v-bind:style="{height:height}"></base-notepad>
+    <base-notepad v-bind:value="queryBody" v-on:input="onInput" class="sandbox-query-editor__query-body" v-bind:style="{height:height}"></base-notepad>
   </v-container>
 </template>
 
@@ -68,8 +68,6 @@ export default {
       this.copyQuery();
       this.$store.commit(SET_QUERY_BODY, null);
     },
-
-    // EVENTS
     onInput (newQuery) {
       this.$store.commit(SET_QUERY_BODY, newQuery);
     }
@@ -81,10 +79,6 @@ export default {
 
   .btn {
     min-width: 0px;
-  }
-
-  .editor {
-    border-radius: 0px 0px 5px 5px;
   }
 
 </style>

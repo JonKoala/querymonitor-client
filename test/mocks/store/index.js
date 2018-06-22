@@ -13,7 +13,7 @@ export default {
   actions,
   getters,
   mutations,
-  state,
+  state: Object.assign({}, state),
   modules: {
     [resultsModuleNamespace]: resultsModule,
     [sandboxModuleNamespace]: sandboxModule
