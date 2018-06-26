@@ -5,6 +5,9 @@
       v-show="showTable"
       v-bind:items="items"
       v-bind:headers="headers"
+      v-bind:total-items="items.length"
+      v-bind:disable-initial-sort="true"
+      v-on:update:pagination="onChangePagination"
       hide-actions>
       <template slot="items" slot-scope="props">
         <td v-for="prop in Object.keys(props.item)" >{{ props.item[prop] }}</td>
@@ -19,16 +22,17 @@
 export default {
   name: 'BaseResultsTable',
   props: {
-    value: { type: Array },
+    error: { type: String },
     isLoading: { type: Boolean },
-    error: { type: String }
+    lines: { type: Array },
+    value: { type: Object }
   },
   computed: {
     isNull () {
-      return this.value == null;
+      return this.lines == null;
     },
     isEmpty () {
-      return this.value instanceof Array && this.value.length === 0;
+      return this.lines instanceof Array && this.lines.length === 0;
     },
 
     showTable () {
@@ -45,16 +49,23 @@ export default {
     },
 
     items () {
-      return (this.isNull) ? [] : this.value;
+      return (this.isNull) ? [] : this.lines;
     },
     headers () {
       if (this.isNull || this.isEmpty)
         return [];
 
-      var sample = this.value[0];
+      var sample = this.lines[0];
       return Object.keys(sample).map(label => {
-        return {text: label.toUpperCase(), value: label};
+        return { text: label.toUpperCase(), value: label };
       });
+    }
+  },
+  methods: {
+    onChangePagination (pagination) {
+      var newSortObj = { descending: pagination.descending, sortBy: pagination.sortBy };
+      if (JSON.stringify(newSortObj) != JSON.stringify(this.value))
+        this.$emit('input', newSortObj);
     }
   }
 }

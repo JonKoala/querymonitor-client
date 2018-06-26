@@ -18,7 +18,7 @@
             <base-icon-button v-on:click="showingDeleteMenu = true" v-if="isEditMode" tooltip="Deletar" class="sandbox__delete-menu-button mr-5" color="white" top>delete</base-icon-button>
             <base-icon-button v-on:click="showingSaveMenu = true" v-bind:disabled="!isRunnable" tooltip="Salvar" class="sandbox__save-menu-button" color="white" top>save</base-icon-button>
           </v-toolbar>
-          <base-results-table v-model="selectResult"  v-bind:error="selectError" v-bind:isLoading="isExecutingQuery" class="pa-0"></base-results-table>
+          <select-results-table v-bind:isLoading="isExecutingQuery" v-bind:rows="maxTableRows" class="pa-0"></select-results-table>
         </v-card>
       </v-flex>
       <v-dialog v-model="showingSaveMenu" v-bind:persistent="isSaving" max-width="600px">
@@ -38,19 +38,19 @@ import { mapGetters } from 'vuex'
 import { NAMESPACE, DELETE_LOCAL_QUERY, EXECUTE_QUERY, SAVE_LOCAL_QUERY, START_VIEW } from 'store/views/sandbox.type'
 
 import BaseIconButton from 'components/BaseIconButton'
-import BaseResultsTable from 'components/BaseResultsTable'
 import SandboxDeleteMenu from 'components/SandboxDeleteMenu'
 import SandboxQueryEditor from 'components/SandboxQueryEditor'
 import SandboxSaveMenu from 'components/SandboxSaveMenu'
+import SelectResultsTable from 'components/SelectResultsTable'
 
 export default {
   name: 'ViewCreate',
   components: {
     BaseIconButton,
-    BaseResultsTable,
     SandboxDeleteMenu,
     SandboxQueryEditor,
-    SandboxSaveMenu
+    SandboxSaveMenu,
+    SelectResultsTable
   },
   data () {
     return {
@@ -73,13 +73,12 @@ export default {
       'queryBody',
       'queryId',
       'queryTitle',
-      'selectResult',
-      'selectError',
     ]),
     ...mapGetters(NAMESPACE, [
       'isDeletingQuery',
       'isExecutingQuery',
       'isSaving',
+      'maxTableRows',
       'viewMode'
     ]),
     isRunnable () {

@@ -5,13 +5,14 @@ import {
   DELETE_LOCAL_QUERY, EXECUTE_QUERY, SAVE_LOCAL_QUERY, START_SANDBOX, START_AS_EDIT, START_AS_SANDBOX, START_VIEW
 } from './sandbox.type'
 import { RESET_QUERY_STATE, RESET_SELECT_STATE } from 'store/mutations.type'
-import { DELETE_QUERY, EXECUTE_SELECT, FETCH_QUERY, SAVE_QUERY } from 'store/actions.type'
+import { DELETE_QUERY, EXECUTE_PAGINATED_SELECT, FETCH_QUERY, SAVE_QUERY } from 'store/actions.type'
 
 
 const initialState = {
   isDeletingQuery: false,
   isExecutingQuery: false,
   isSaving: false,
+  maxTableRows: 10
 }
 const state = Object.assign({}, initialState)
 
@@ -28,6 +29,9 @@ const getters = {
   },
   viewMode (state, allGetters, rootState) {
     return rootState.route.name;
+  },
+  maxTableRows (state) {
+    return state.maxTableRows;
   },
 
   paramId(state, allGetters, rootState) {
@@ -77,11 +81,11 @@ const actions = {
       commit(END_DELETING_QUERY);
     }
   },
-  async [EXECUTE_QUERY] ({ commit, dispatch, rootGetters }) {
+  async [EXECUTE_QUERY] ({ commit, dispatch, getters, rootGetters }) {
     commit(START_EXECUTING_QUERY);
 
     try {
-      await dispatch(EXECUTE_SELECT, rootGetters.queryBody, { root: true });
+      await dispatch(EXECUTE_PAGINATED_SELECT, { query: rootGetters.queryBody, rowsPerPage: getters.maxTableRows, page: 1 }, { root: true });
     } catch(err) {
       throw err;
     } finally {
@@ -104,7 +108,7 @@ const actions = {
 
     try {
       await dispatch(FETCH_QUERY, getters.paramId, { root: true });
-      await dispatch(EXECUTE_SELECT, rootGetters.queryBody, { root: true });
+      await dispatch(EXECUTE_PAGINATED_SELECT, { query: rootGetters.queryBody, rowsPerPage: getters.maxTableRows, page: 1 }, { root: true });
     } catch(err) {
       throw err;
     } finally {
