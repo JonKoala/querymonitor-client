@@ -17,7 +17,7 @@ import BaseResultsTable from 'components/BaseResultsTable'
 import SelectResultsTable from 'components/SelectResultsTable'
 
 export default {
-  name: 'ViewResults',
+  name: 'SelectResultsTable',
   components: {
     BaseResultsTable,
     SelectResultsTable
