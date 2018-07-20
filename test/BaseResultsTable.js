@@ -100,13 +100,61 @@ describe('BaseResultsTable.vue', function() {
 
   describe('Events', function() {
 
-    it('Should emit the \'input\' event when a header column is clicked');
+    it('Should emit the \'input\' event when a header column is clicked', async function() {
+      var lines = [{'col 1': 'val a', 'col 2': 'val b'}, {'col 1': 'val c', 'col 2': 'val d'}];
 
-    it('Should send an object as \'input\' payload');
+      var wrapper = mount(BaseResultsTable, { localVue });
+      wrapper.setProps({ lines });
 
-    it('Should send a boolean \'descending\' as part of \'input\' payload');
+      // the mounting process is triggering the 'input' event, 2 times
+      // i know that this is happening only on this emulated environment
+      var triggersOnMount = wrapper.emitted().input.length;
+      wrapper.find('.results-table__data-table thead th').trigger('click');
+      var triggerCount = wrapper.emitted().input.length - triggersOnMount;
 
-    it('Should send a string \'sortBy\' as part of \'input\' payload');
+      expect(wrapper.emitted()).to.have.all.keys('input');
+      expect(triggerCount).to.equal(1);
+    });
+
+    it('Should send an { descending, sortBy } object as \'input\' payload', async function() {
+      var lines = [{'col 1': 'val a', 'col 2': 'val b'}, {'col 1': 'val c', 'col 2': 'val d'}];
+
+      var wrapper = mount(BaseResultsTable, { localVue });
+      wrapper.setProps({ lines });
+
+      wrapper.find('.results-table__data-table thead th').trigger('click');
+      var inputPayload = wrapper.emitted().input.slice(-1);
+      expect(inputPayload).to.be.an('array');
+      expect(inputPayload.length).to.equal(1);
+
+      var payloadData = inputPayload[0][0];
+      expect(payloadData).to.be.an('object');
+      expect(payloadData).to.have.all.keys('descending', 'sortBy');
+    });
+
+    it('Should send a boolean { descending } as part of \'input\' payload', function() {
+      var lines = [{'col 1': 'val a', 'col 2': 'val b'}, {'col 1': 'val c', 'col 2': 'val d'}];
+
+      var wrapper = mount(BaseResultsTable, { localVue });
+      wrapper.setProps({ lines });
+
+      wrapper.find('.results-table__data-table thead th').trigger('click');
+      var payloadData = wrapper.emitted().input.slice(-1)[0][0];
+
+      expect(payloadData.descending).to.be.an('boolean');
+    });
+
+    it('Should send a string { sortBy } as part of \'input\' payload', function() {
+      var lines = [{'col 1': 'val a', 'col 2': 'val b'}, {'col 1': 'val c', 'col 2': 'val d'}];
+
+      var wrapper = mount(BaseResultsTable, { localVue });
+      wrapper.setProps({ lines });
+
+      wrapper.find('.results-table__data-table thead th').trigger('click');
+      var payloadData = wrapper.emitted().input.slice(-1)[0][0];
+
+      expect(payloadData.sortBy).to.be.an('string');
+    });
 
   });
 

@@ -4,5 +4,6 @@ export default {
   queryBody: null,
   queryTitle: null,
   selectResult: null,
+  selectTotal: null,
   selectError: null
 }
