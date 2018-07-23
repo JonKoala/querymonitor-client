@@ -3,7 +3,7 @@
     <base-results-table v-model="sortObj" v-bind:lines="selectResult" v-bind:isLoading="isLoading" v-bind:error="selectError" v-on:input="refreshResults" class="results__table pa-0"></base-results-table>
     <v-divider v-if="showingPagination"></v-divider>
     <div v-if="showingPagination" class="select-results-table__pagination text-xs-center pt-3 pb-2">
-      <v-pagination v-model="page" v-bind:length="pages" v-on:input="refreshResults"></v-pagination>
+      <v-pagination v-model="page" v-bind:length="pages" v-bind:total-visible="maxPages" v-on:input="refreshResults"></v-pagination>
     </div>
   </v-container>
 </template>
@@ -24,7 +24,8 @@ export default {
   },
   props: {
     isLoading: { type: Boolean },
-    rows: { type: Number }
+    rows: { type: Number },
+    maxPages: { type: Number }
   },
   data () {
     return {
