@@ -1,8 +1,7 @@
+const config = require('config')
 const ConfigWebpackPlugin = require("config-webpack")
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const path = require('path')
-
-const config = require('config')
 
 module.exports = {
   output: {
@@ -39,12 +38,6 @@ module.exports = {
       '~': __dirname
     },
     extensions: ['*', '.js', '.vue', '.json']
-  },
-  devServer: {
-    historyApiFallback: true,
-    noInfo: true,
-    overlay: true,
-	  port: config.get('server.port')
   },
   plugins: [
     new ConfigWebpackPlugin(),

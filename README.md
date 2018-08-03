@@ -16,7 +16,11 @@ $ npm install
 ```
 
 ## Configuração
-O projeto depende de um arquivo de configuração, que deve ficar no diretório `config/`. Crie uma cópia do arquivo `default.yml.example`, renomeie para `default.yml` e coloque as configurações do seu ambiente.
+O projeto depende de arquivos de configuração, que devem ficar no diretório `config/`.
+
+Deve existir um arquivo de configurações para cada ambiente em que o projeto irá trabalhar. Atualmente o Client aceita arquivos para os ambientes de desenvolvimento (arquivo `dev.yml`) e produção (arquivo `prod.yml`).
+
+Para criar um arquivo de configurações novo, crie uma cópia do arquivo `default.yml.example`, renomeie de acordo com o ambiente e altere o conteúdo do arquivo.
 
 Exemplo de arquivo de configurações:
 ``` yaml

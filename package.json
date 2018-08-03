@@ -6,9 +6,10 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "test": "cross-env karma start --single-run",
-    "dev": "cross-env webpack-dev-server --hot --mode development",
-    "build": "cross-env webpack --progress --hide-modules --mode production"
+    "build": "cross-env NODE_ENV=prod webpack --progress --hide-modules --config webpack.prod.js",
+    "dev": "cross-env NODE_ENV=dev webpack-dev-server --hot --config webpack.dev.js",
+    "start": "cross-env NODE_ENV=prod node ./server.js",
+    "test": "cross-env karma start --single-run"
   },
   "dependencies": {
     "axios": "^0.18.0",

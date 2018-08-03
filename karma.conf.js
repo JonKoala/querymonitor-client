@@ -7,7 +7,7 @@ module.exports = function (config) {
     preprocessors: {
       'test/*.js': ['webpack', 'sourcemap']
     },
-    webpack: require('./webpack.config.js'),
+    webpack: require('./webpack.prod.js'),
     webpackMiddleware: {
       stats: 'errors-only'
     },
